@@ -10,11 +10,17 @@ public class Main {
 	public static void main(String[] args){
 		Parser p = new Parser("test.rpy");
 		Noeud n = p.parse();
+		/**
+		 * Affichage du parsing
+		 */
 //		for (Propriete prop : n.getProprietes()) {
 //			System.out.println(prop.toString());
 //		}
-		Writer w = new Writer(n, "out.txt");
-		w.write();
+		/**
+		 * Test de l'écriture du projet dans un fichier
+		 */
+//		Writer w = new Writer(n, "out.txt");
+//		w.write();
 	}
 
 }
