@@ -27,7 +27,7 @@ public class Parser {
 	private void init(){
 		path = "";
 		tree = new Noeud();
-		size = -1;
+		size = -8000;
 	}
 	
 	public Noeud parse(){
@@ -66,14 +66,14 @@ public class Parser {
 			//Propriété
 			if (ligne.contains("- ")) {
 				ArrayList<Noeud> noeuds = null;
-				int intValue = -1;
+				int intValue = -8000;
 				String stringValue = null;
 				String nom = null;
 				int beginNom = ligne.indexOf("- ")+"- ".length();
 				int endNom = ligne.indexOf("=")-1;
 				nom = ligne.substring(beginNom, endNom).replaceAll("\\s", "");
 //				System.out.println("nom : "+nom);
-				//Une propriété "finale"
+				//Une propriété "finale"/simple
 				if (ligne.contains(";")) {
 					int beginValue = endNom + 2;
 					int endValue = ligne.indexOf(";");
@@ -86,6 +86,17 @@ public class Parser {
 					if (nom.equals("size")) {
 						size = intValue;
 					}
+				}
+				else if (nom.equals("frameset")) {
+					int beginValue = endNom + 2;
+					int endValue = ligne.length();
+					stringValue = ligne.substring(beginValue, endValue);
+//					br.readLine();
+					while(!ligne.contains(";")){
+						ligne = br.readLine();
+						stringValue += ligne;
+					}
+					stringValue = stringValue.substring(0, stringValue.indexOf(";"));
 				}
 				//Une propriété qui est un noeud
 				else if (ligne.contains("=") && ligne.contains("{")) {

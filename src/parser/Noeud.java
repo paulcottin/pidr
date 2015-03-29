@@ -19,18 +19,24 @@ public class Noeud {
 	}
 	
 	public String toString(){
-		String ligne = "";
-		for (Noeud n : childs) {
-			ligne += NoeudToString(n);
+		String ligne = "***\n";
+		ligne += classe+"\n";
+		if (childs.size() > 0) {
+			for (Noeud n : childs) {
+				ligne += NoeudToString(n);
+			}
+		}else {
+			for (Propriete p : proprietes) {
+				ligne += p.toString();
+			}
 		}
 		return ligne;
 	}
 	
 	private String NoeudToString(Noeud n){
-		String string = "***\n";
-		string += n.getClasse()+"\n";
+		String string = "";
 		for (Propriete p : n.getProprietes()) {
-			string += "-->"+p.getNom()+" : "+((p.getIntValue() == -1)?p.getStringValue():p.getIntValue())+"\n";
+			string += p.toString();
 		}
 		for (Noeud noeud : n.getChilds()) {
 			NoeudToString(noeud);

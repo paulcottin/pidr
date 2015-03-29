@@ -23,7 +23,19 @@ public class Propriete {
 		nom = null;
 		stringValue = null;
 		noeuds = null;
-		intValue = -1;
+		intValue = -8000;
+	}
+	
+	public String toString(){
+		String string = "";
+		string += nom+" : ";
+		string += (stringValue != null) ? stringValue+"\n" : intValue+", StringValue : "+stringValue+"\n";
+		if (noeuds != null) {
+			for (Noeud n : noeuds) {
+				string += n.toString();
+			}
+		}
+		return string;
 	}
 
 	public String getNom() {
