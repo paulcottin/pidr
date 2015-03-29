@@ -10,6 +10,7 @@ public class Writer {
 	private Noeud noeud;
 	static BufferedWriter bw;
 	private String path;
+	@SuppressWarnings("unused")
 	private int size, decalage;
 	private boolean suiteNoeud;
 	

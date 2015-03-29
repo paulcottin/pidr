@@ -1,5 +1,6 @@
 package modele;
 
+import donnees.Value;
 import parser.Noeud;
 import parser.Parser;
 import parser.Propriete;
@@ -8,8 +9,11 @@ import parser.Writer;
 public class Main {
 	
 	public static void main(String[] args){
-		Parser p = new Parser("test.rpy");
-		Noeud n = p.parse();
+		/**
+		 * Création du parser et parsage du fichier pour obtenir l'arbre de noeuds
+		 */
+//		Parser p = new Parser("test.rpy");
+//		Noeud n = p.parse();
 		/**
 		 * Affichage du parsing
 		 */

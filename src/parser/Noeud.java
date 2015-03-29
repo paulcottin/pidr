@@ -45,6 +45,31 @@ public class Noeud {
 		return string;
 	}
 	
+	public Noeud getChildByName(String name){
+		Noeud n = null;
+		
+		return n;
+	}
+	
+	public Propriete getProprieteByName(String name){
+		for (Propriete prop : this.getProprietes()) {
+			if (prop.getNom().equals(name))
+				return prop;
+		}
+		return null;
+	}
+	
+	public Propriete getProprieteById(String id){
+		for (Propriete p : proprietes) {
+			if (p.getNom().equals("_id")) {
+				if (p.getStringValue().equals(id)) {
+					return p;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public int getChildCount(){
 		return childs.size();
 	}
