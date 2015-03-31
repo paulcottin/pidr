@@ -52,4 +52,12 @@ public class Projet {
 	public void setNoeud(Noeud noeud) {
 		this.noeud = noeud;
 	}
+
+	public ArrayList<Diagramme> getDiagrammes() {
+		return diagrammes;
+	}
+
+	public void setDiagrammes(ArrayList<Diagramme> diagrammes) {
+		this.diagrammes = diagrammes;
+	}
 }
