@@ -1,11 +1,14 @@
 package donnees;
 
+import java.util.ArrayList;
+
 import parser.Noeud;
 
 public class Projet {
 
 	private String nomProjet, typeDiagramme;
 	private Noeud noeud;
+	private ArrayList<Diagramme> diagrammes;
 	
 	public Projet() {
 		init();
@@ -19,6 +22,11 @@ public class Projet {
 	private void init(){
 		nomProjet = "";
 		noeud = new Noeud();
+		diagrammes = new ArrayList<Diagramme>();
+	}
+	
+	private void typeDiagramme(){
+		typeDiagramme = noeud.getProprieteByName("").getStringValue();
 	}
 
 	public String getNomProjet() {
