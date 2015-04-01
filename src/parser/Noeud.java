@@ -13,7 +13,7 @@ public class Noeud {
 	}
 	
 	private void init(){
-		childs = new ArrayList<Noeud>();
+		childs = null;
 		proprietes = new ArrayList<Propriete>();
 		classe = "";
 	}
@@ -21,11 +21,14 @@ public class Noeud {
 	public String toString(){
 		String ligne = "***\n";
 		ligne += classe+"\n";
-		if (childs.size() > 0) {
-			for (Noeud n : childs) {
-				ligne += NoeudToString(n);
+		if (childs != null) {
+			if (childs.size() > 0) {
+				for (Noeud n : childs) {
+					ligne += NoeudToString(n);
+				}
 			}
-		}else {
+		}
+		if (proprietes != null) {
 			for (Propriete p : proprietes) {
 				ligne += p.toString();
 			}
@@ -35,11 +38,15 @@ public class Noeud {
 	
 	private String NoeudToString(Noeud n){
 		String string = "";
-		for (Propriete p : n.getProprietes()) {
-			string += p.toString();
+		if (n.getProprietes() != null) {
+			for (Propriete p : n.getProprietes()) {
+				string += p.toString();
+			}
 		}
-		for (Noeud noeud : n.getChilds()) {
-			NoeudToString(noeud);
+		if (n.getChilds() != null) {
+			for (Noeud noeud : n.getChilds()) {
+				NoeudToString(noeud);
+			}
 		}
 		string += "---\n";
 		return string;
@@ -71,7 +78,11 @@ public class Noeud {
 	}
 	
 	public int getChildCount(){
-		return childs.size();
+		if (childs != null) {
+			return childs.size();
+		}else {
+			return -1;
+		}
 	}
 
 	public ArrayList<Noeud> getChilds() {

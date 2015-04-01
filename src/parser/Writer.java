@@ -35,7 +35,7 @@ public class Writer {
 		try {
 			bw = new BufferedWriter(new FileWriter(new File(path)));
 			bw.write("I-Logix-RPY-Archive version 8.10.0 C++ 8169320\n");
-			System.out.println("I-Logix-RPY-Archive version 8.10.0 C++ 8169320");
+//			System.out.println("I-Logix-RPY-Archive version 8.10.0 C++ 8169320");
 			writeNoeud(noeud);
 			bw.close();
 		} catch (IOException e) {
@@ -46,24 +46,27 @@ public class Writer {
 	private void writeNoeud(Noeud n) throws IOException{
 		if (suiteNoeud) {
 			bw.write(writeDecalage()+"{ "+n.getClasse()+"\n");
-			System.out.println("{ "+n.getClasse()+"\n");
+//			System.out.println("{ "+n.getClasse()+"\n");
 			decalage++;
 		}else {
 			bw.write("{ "+n.getClasse()+"\n");
-			System.out.println("{ "+n.getClasse()+"\n");
+//			System.out.println("{ "+n.getClasse()+"\n");
 			decalage++;
 		}
-		for (Propriete p : n.getProprietes()) {
-			writePropriete(p);
-		}
-		if (n.getChildCount() > 0) {
+		if (n.getChilds() != null) {
 			for (Noeud noeud : n.getChilds()) {
+				System.out.println(n.toString());
 				writeNoeud(noeud);
+			}
+		}
+		if (n.getProprietes() != null) {
+			for (Propriete p : n.getProprietes()) {
+				writePropriete(p);
 			}
 		}
 		decalage--;
 		bw.write(writeDecalage()+"}\n");
-		System.out.println("}");
+//		System.out.println("}");
 		
 	}
 	
@@ -76,12 +79,12 @@ public class Writer {
 		//Si c'est une propriété simple
 		if (!(p.getIntValue() == -8000 && p.getStringValue() == null)) {
 			bw.write(writeDecalage()+"- "+p.getNom()+" = "+((p.getIntValue() == -8000) ? p.getStringValue() : p.getIntValue())+";\n");
-			System.out.println("- "+p.getNom()+" = "+((p.getIntValue() == -8000) ? p.getStringValue() : p.getIntValue())+";\n");
+//			System.out.println("- "+p.getNom()+" = "+((p.getIntValue() == -8000) ? p.getStringValue() : p.getIntValue())+";\n");
 		}
 		//Si c'est un noeud
 		else{
 			bw.write(writeDecalage()+"- "+p.getNom()+" = ");
-			System.out.println("- "+p.getNom()+" = ");
+//			System.out.println("- "+p.getNom()+" = ");
 			if (p.getNom().equals("value")) {
 				bw.write("\n");
 			}

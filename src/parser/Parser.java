@@ -5,12 +5,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * Problème quand on ferme une suite de childs pour noeud (avec elementList)
+ * Il doit falloir sauter une ligne au bon moment
+ * @author Paul
+ *
+ */
 public class Parser {
 
 	private String path;
 	private Noeud tree;
-	private int size;
+	private int size, i = 0, elementList;
+	private boolean element;
 	static BufferedReader br;
 	
 	public Parser() {
@@ -29,7 +35,6 @@ public class Parser {
 	}
 	
 	public Noeud parse(){
-		
 		try {
 			br = new BufferedReader(new FileReader(new File(path)));
 			String ligne = "";
@@ -48,18 +53,24 @@ public class Parser {
 		}
 		return tree;
 	}
-	
+	/**
+	 * Crée un noeud à partir de 'ligne' et lui donne son nom de classe
+	 * @param ligne
+	 * @return
+	 * @throws IOException
+	 */
 	private Noeud creerNoeud(String ligne) throws IOException{
 		Noeud n = new Noeud();
 		int mark = ligne.indexOf("{");
 		n.setClasse(ligne.substring(mark+1, ligne.length()-1).replaceAll("\\s", ""));
-//		System.out.println("-->"+n.getClasse());
 		ligne = br.readLine();
 		n = parcourirNoeud(ligne, n);
 		return n;
 	}
 	
 	private Noeud parcourirNoeud(String ligne, Noeud n) throws IOException{
+//		ArrayList<Propriete> prop = new ArrayList<Propriete>();
+		element = false;
 		while(!ligne.contains("}")){
 			//Propriété
 			if (ligne.contains("- ")) {
@@ -84,6 +95,20 @@ public class Parser {
 					if (nom.equals("size")) {
 						size = intValue;
 					}
+					if (nom.equals("elementList")) {
+						elementList = intValue;
+						element = true;
+					}
+				}
+				if (nom.equals("elementList")) {
+					System.out.println("elementLists");
+//					ligne = br.readLine();
+//					nom = "";
+//					System.out.println("line : "+ligne);
+//					noeuds = new ArrayList<Noeud>();
+//					for (int i = 0; i < elementList; i++) {
+//						noeuds.add(creerNoeud(ligne));
+//					}
 				}
 				else if (nom.equals("frameset")) {
 					int beginValue = endNom + 2;
@@ -110,11 +135,28 @@ public class Parser {
 						noeuds.add(creerNoeud(ligne));
 					}
 				}
+//				else if (nom.equals("elementList")) {
+//					
+//				}
 //				System.out.println("add prop");
+//				n.setProprietes(prop);
 				n.getProprietes().add(new Propriete(nom, stringValue, intValue, noeuds));
 			}
-			ligne = br.readLine();
-			
+			if(element){
+				System.out.println("pas une propriete");
+				element = false;
+				n.setChilds(new ArrayList<Noeud>());
+				ligne = br.readLine();
+				System.out.println("ligne : "+ligne);
+				for (int i = 0; i < elementList; i++) {
+					n.getChilds().add(creerNoeud(ligne));
+				}
+				System.out.println("child count : "+n.getChildCount());
+			}
+			if ((ligne = br.readLine()) == null) {
+				ligne = "}";
+//				System.out.println(ligne);
+			}
 		}
 		return n;
 	}
