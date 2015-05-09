@@ -54,12 +54,6 @@ public class Noeud {
 		return res;
 	}
 	
-//	private String NoeudToString(Noe n){
-//		String res = "";
-//		res += n.toString();
-//		return res;
-//	}
-	
 	public Noeud getChildByName(String name){
 		Noeud n = null;
 		
