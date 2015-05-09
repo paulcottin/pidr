@@ -1,10 +1,15 @@
 package modele;
 
+<<<<<<< HEAD
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+=======
+import donnees.Creator;
+import donnees.Projet;
+>>>>>>> 38a94ac50dcca2119e847ca9046ab168d91416b1
 import donnees.Value;
 import parser.Noeud;
 import parser.Parser2;
@@ -16,6 +21,7 @@ public class Main {
 		/**
 		 * Création du parser et parsage du fichier pour obtenir l'arbre de noeuds
 		 */
+<<<<<<< HEAD
 		Parser2 p = new Parser2("test.rpy");
 		Noeud n = p.parse();
 //		Noeud test = n;
@@ -50,15 +56,34 @@ public class Main {
 //			e.printStackTrace();
 //		}
 //		for (Propriete prop : n.getProprietes()) {
+=======
+		Parser p = new Parser("test.rpy");
+		Noeud n = p.parse();
+		/**
+		 * Affichage du parsing
+		 */
+//		for (Propriete prop : p.getTree().getProprietes()) {
+>>>>>>> 38a94ac50dcca2119e847ca9046ab168d91416b1
 //			System.out.println(prop.toString());
 //		}
 		/**
 		 * Test de l'écriture du projet dans un fichier
 		 */
+<<<<<<< HEAD
 //		System.out.println(n.getClasse());
 		Writer w = new Writer(n, "out.txt");
 		w.setInitLigne(p.getInitLigne());
 		w.write();
+=======
+//		Writer w = new Writer(n, "out.txt");
+//		w.write();
+		/**
+		 * Créer un arbre de classe
+		 */
+		Creator c = new Creator(p.getTree());
+		c.createProjet();
+		
+>>>>>>> 38a94ac50dcca2119e847ca9046ab168d91416b1
 	}
 
 }
