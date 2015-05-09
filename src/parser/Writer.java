@@ -9,7 +9,7 @@ public class Writer {
 	
 	private Noeud noeud;
 	static BufferedWriter bw;
-	private String path;
+	private String path, initLigne;
 	@SuppressWarnings("unused")
 	private int size, decalage;
 	private boolean suiteNoeud;
@@ -29,13 +29,13 @@ public class Writer {
 		path = "";
 		decalage = 0;
 		suiteNoeud = false;
+		initLigne = "";
 	}
 	
 	public void write(){
 		try {
 			bw = new BufferedWriter(new FileWriter(new File(path)));
-			bw.write("I-Logix-RPY-Archive version 8.10.0 C++ 8169320\n");
-			System.out.println("I-Logix-RPY-Archive version 8.10.0 C++ 8169320");
+			bw.write(initLigne+"\n");
 			writeNoeud(noeud);
 			bw.close();
 		} catch (IOException e) {
@@ -46,51 +46,44 @@ public class Writer {
 	private void writeNoeud(Noeud n) throws IOException{
 		if (suiteNoeud) {
 			bw.write(writeDecalage()+"{ "+n.getClasse()+"\n");
-			System.out.println("{ "+n.getClasse()+"\n");
 			decalage++;
 		}else {
 			bw.write("{ "+n.getClasse()+"\n");
-			System.out.println("{ "+n.getClasse()+"\n");
 			decalage++;
 		}
-		for (Propriete p : n.getProprietes()) {
-			writePropriete(p);
-		}
-		if (n.getChildCount() > 0) {
-			for (Noeud noeud : n.getChilds()) {
-				writeNoeud(noeud);
+		if (n.getChilds() != null) {
+			if (n.getChildCount() > 0) {
+				for (Noeud noeud : n.getChilds()) {
+					writeNoeudHelper(noeud);
+				}
 			}
 		}
 		decalage--;
 		bw.write(writeDecalage()+"}\n");
-		System.out.println("}");
-		
 	}
 	
-	private void writePropriete(Propriete p) throws IOException{
-		suiteNoeud = false;
-		//Si c'est une propritété de type "size" on sauvegarde pour écrire le bon nombre de child ensuite
-		if (p.getNom().equals("size")) {
-			this.size = p.getIntValue();
+	private void writeNoeudHelper(Noeud n) throws IOException{
+		if (n.getName().equals("size")) {
+			this.size = n.getIntValue();
 		}
 		//Si c'est une propriété simple
-		if (!(p.getIntValue() == -8000 && p.getStringValue() == null)) {
-			bw.write(writeDecalage()+"- "+p.getNom()+" = "+((p.getIntValue() == -8000) ? p.getStringValue() : p.getIntValue())+";\n");
-			System.out.println("- "+p.getNom()+" = "+((p.getIntValue() == -8000) ? p.getStringValue() : p.getIntValue())+";\n");
+		if (!(n.getIntValue() == -8000 && n.getStringValue() == null)) {
+			bw.write(writeDecalage()+"- "+n.getName()+" = "+((n.getIntValue() == -8000) ? n.getStringValue() : n.getIntValue())+";\n");
 		}
 		//Si c'est un noeud
-		else{
-			bw.write(writeDecalage()+"- "+p.getNom()+" = ");
-			System.out.println("- "+p.getNom()+" = ");
-			if (p.getNom().equals("value")) {
+		else {
+			bw.write(writeDecalage()+""+((!n.getName().equals("") ? "- " : ""))+n.getName()+""+((!n.getName().equals("") ? " = " : "")));
+			
+			if (n.getName().equals("value")) {
 				bw.write("\n");
+				bw.write(writeDecalage());
 			}
-			for (Noeud n : p.getNoeuds()) {
-				if (p.getNom().equals("value"))
+			for (Noeud no : n.getChilds()) {
+				if (no.getName().equals("value") || no.getName().equals("elementList"))
 					suiteNoeud = true;
 				else
 					suiteNoeud = false;
-				writeNoeud(n);
+				writeNoeud(no);
 			}
 		}
 	}
@@ -117,6 +110,14 @@ public class Writer {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public String getInitLigne() {
+		return initLigne;
+	}
+
+	public void setInitLigne(String initLigne) {
+		this.initLigne = initLigne;
 	}
 
 }

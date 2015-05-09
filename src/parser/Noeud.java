@@ -5,69 +5,65 @@ import java.util.ArrayList;
 public class Noeud {
 
 	private ArrayList<Noeud> childs;
-	private ArrayList<Propriete> proprietes;
-	private String classe;
+	private String name, classe, stringValue;
+	private int intValue;
 	
 	public Noeud() {
 		init();
 	}
 	
+	public Noeud(String name){
+		init();
+		this.name = name;
+	}
+	
+	public Noeud(String name, int intValue, String stringValue, ArrayList<Noeud> childs){
+		init();
+		this.name = name;
+		this.intValue = intValue;
+		this.stringValue = stringValue;
+		this.childs = childs;
+	}
+	
+	public Noeud(int intValue, String stringValue, ArrayList<Noeud> childs){
+		init();
+		this.intValue = intValue;
+		this.stringValue = stringValue;
+		this.childs = childs;
+	}
+	
 	private void init(){
 		childs = new ArrayList<Noeud>();
-		proprietes = new ArrayList<Propriete>();
 		classe = "";
+		name = "";
+		stringValue = "";
+		intValue = -8000;
 	}
 	
 	public String toString(){
-		String ligne = "***\n";
-		ligne += classe+"\n";
-		if (childs.size() > 0) {
+		String res = "";
+		res += this.getName()+" { "+this.getClasse()+"\n";
+		if (intValue != -8000) res+= intValue;
+		if (stringValue != null) res += stringValue;
+		if (childs != null) {
 			for (Noeud n : childs) {
-				ligne += NoeudToString(n);
-			}
-		}else {
-			for (Propriete p : proprietes) {
-				ligne += p.toString();
+				res += n.toString();
 			}
 		}
-		return ligne;
+		res += "\n";
+		return res;
 	}
 	
-	private String NoeudToString(Noeud n){
-		String string = "";
-		for (Propriete p : n.getProprietes()) {
-			string += p.toString();
-		}
-		for (Noeud noeud : n.getChilds()) {
-			NoeudToString(noeud);
-		}
-		string += "---\n";
-		return string;
-	}
+//	private String NoeudToString(Noe n){
+//		String res = "";
+//		res += n.toString();
+//		return res;
+//	}
 	
 	public Noeud getChildByName(String name){
 		Noeud n = null;
 		
 		return n;
-	}
-	
-	public Propriete getProprieteByName(String name){
-		for (Propriete prop : this.getProprietes()) {
-			if (prop.getNom().equals(name))
-				return prop;
-		}
-		return null;
-	}
-	
-	public Propriete getProprieteById(String id){
-		for (Propriete p : proprietes) {
-			if (p.getNom().equals("_id")) {
-				if (p.getStringValue().equals(id)) {
-					return p;
-				}
-			}
-		}
-		return null;
 	}
 	
 	public int getChildCount(){
@@ -82,19 +78,35 @@ public class Noeud {
 		this.childs = childs;
 	}
 
-	public ArrayList<Propriete> getProprietes() {
-		return proprietes;
-	}
-
-	public void setProprietes(ArrayList<Propriete> proprietes) {
-		this.proprietes = proprietes;
-	}
-
 	public String getClasse() {
 		return classe;
 	}
 
 	public void setClasse(String classe) {
 		this.classe = classe;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStringValue() {
+		return stringValue;
+	}
+
+	public void setStringValue(String stringValue) {
+		this.stringValue = stringValue;
+	}
+
+	public int getIntValue() {
+		return intValue;
+	}
+
+	public void setIntValue(int intValue) {
+		this.intValue = intValue;
 	}
 }
