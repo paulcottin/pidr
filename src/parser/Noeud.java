@@ -69,9 +69,12 @@ public class Noeud {
 		res += name;
 		res += " ("+((childs == null) ? 0 : childs.size())+")";
 		res += " [";
-		for (Noeud no : childs) {
-			res += no.getName()+", ";
-		}
+		if (childs != null) {
+			for (Noeud no : childs) {
+				res += no.getName()+", ";
+			}
+		}else
+			res += "NULL";
 		res += "]";
 		return res;
 	}
@@ -79,7 +82,8 @@ public class Noeud {
 	public Noeud getChildByName(String name){
 		for (Noeud no : childs) {
 			if (no.getName().equals(name)) {
-				return no;
+				if (no.getChilds() != null && no.getChilds().get(0).getChilds() != null && !no.getName().equals("value")) return no.getChilds().get(0);
+				else return no;
 			}
 		}
 		return null;

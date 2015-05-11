@@ -12,7 +12,7 @@ public class Main {
 		 * Création du parser et parsage du fichier pour obtenir l'arbre de noeuds
 		 */
 
-		Parser2 p = new Parser2("test.rpy");
+		Parser2 p = new Parser2("blocksCouleurs.rpy");
 		Noeud n = p.parse();
 //		System.out.println("name : "+n.getName());
 //		System.out.println(n.getChilds().size());

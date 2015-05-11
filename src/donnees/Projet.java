@@ -10,29 +10,25 @@ public class Projet {
 	private String nomProjet, typeProjet;
 	private Noeud noeud;
 	private ArrayList<Diagramme> diagrammes;
-	private GregorianCalendar lastModifiedDate;
+	private String lastModifiedDate;
 	
 	public Projet(Noeud n){
 		this.noeud = n;
-//		init();
+		init();
 	}
 	
 	private void init(){
 		diagrammes = new ArrayList<Diagramme>();
-		nomProjet = noeud.getChildByName("_name").getStringValue();
-		String date = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
-		String[] tab = date.split("\\.");
-		String[] hour = tab[tab.length-1].split(":");
-		for (int i = 0; i < tab.length; i++) {
-			System.out.println("date : "+tab[i]);
+		nomProjet = noeud.getChildByName("_name").getStringValue().split("\"")[1];
+		lastModifiedDate = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
+		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").getStringValue().split("\"")[1];
+		diagrammes = new ArrayList<Diagramme>();
+		int nbDiagrammes = noeud.getChildByName("Diagrams").getChildByName("size").getIntValue()-1;
+//		System.out.println(noeud.getChildByName("Diagrams").getChildByName("value").getChilds().get(0));
+		for (int i = 0; i < nbDiagrammes; i++) {
+			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChildByName("value").getChilds().get(1+i)));
 		}
-		for (int i = 0; i < hour.length; i++) {
-			System.out.println("hour : "+hour[i]);
-		}
-		lastModifiedDate = new GregorianCalendar(Integer.valueOf(tab[2].substring(0, 4)), Integer.valueOf(tab[1]), Integer.valueOf(tab[0]), Integer.valueOf(hour[2]), Integer.valueOf(hour[3]), Integer.valueOf(hour[4]));
-		System.out.println("stereotype : "+noeud.getChildByName("Stereotypes").toString());
-//		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").getStringValue();
-//		System.out.println("new projet : "+nomProjet+"\n ("+lastModifiedDate.toString()+"), type : "+typeProjet);
+		System.out.println("Projet "+nomProjet+" ("+typeProjet+"), modifié le "+lastModifiedDate+" : "+diagrammes.size()+" diagramme(s)");
 	}
 
 	public String getNomProjet() {
@@ -59,19 +55,19 @@ public class Projet {
 		this.diagrammes = diagrammes;
 	}
 
-	public GregorianCalendar getLastModifiedDate() {
-		return lastModifiedDate;
-	}
-
-	public void setLastModifiedDate(GregorianCalendar lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
-
 	public String getTypeProjet() {
 		return typeProjet;
 	}
 
 	public void setTypeProjet(String typeProjet) {
 		this.typeProjet = typeProjet;
+	}
+
+	public String getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(String lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 }
