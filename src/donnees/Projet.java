@@ -1,8 +1,6 @@
 package donnees;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 import parser.Noeud;
 
 public class Projet {
@@ -11,6 +9,7 @@ public class Projet {
 	private Noeud noeud;
 	private ArrayList<Diagramme> diagrammes;
 	private String lastModifiedDate;
+	private int[] correspondance;
 	
 	public Projet(Noeud n){
 		this.noeud = n;
@@ -28,7 +27,9 @@ public class Projet {
 		for (int i = 0; i < nbDiagrammes; i++) {
 			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChildByName("value").getChilds().get(1+i)));
 		}
-		System.out.println("Projet "+nomProjet+" ("+typeProjet+"), modifié le "+lastModifiedDate+" : "+diagrammes.size()+" diagramme(s)");
+		
+		
+//		System.out.println("Projet "+nomProjet+" ("+typeProjet+"), modifié le "+lastModifiedDate+" : "+diagrammes.size()+" diagramme(s)");
 	}
 
 	public String getNomProjet() {
@@ -69,5 +70,13 @@ public class Projet {
 
 	public void setLastModifiedDate(String lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public int[] getCorrespondance() {
+		return correspondance;
+	}
+
+	public void setCorrespondance(int[] correspondance) {
+		this.correspondance = correspondance;
 	}
 }

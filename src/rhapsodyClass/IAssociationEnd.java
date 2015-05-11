@@ -31,10 +31,12 @@ public class IAssociationEnd extends DiagrammeObjets{
 			}
 		}
 
-		String[] rgb = colors.split(",");
-		super.r = Integer.parseInt(rgb[0]);
-		super.g = Integer.parseInt(rgb[1]);
-		super.b = Integer.parseInt(rgb[2]);
+		if (!colors.equals("")) {
+			String[] rgb = colors.split(",");
+			super.r = Integer.parseInt(rgb[0]);
+			super.g = Integer.parseInt(rgb[1]);
+			super.b = Integer.parseInt(rgb[2]);
+		}
 		
 		debut = getOutQuotes(noeud.getChildByName("m_pModelObject").getChildByName("_class").getStringValue());
 		fin = getOutQuotes(noeud.getChildByName("m_pInverseModelObject").getChildByName("_class").getStringValue());

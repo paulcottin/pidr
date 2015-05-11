@@ -1,13 +1,20 @@
 package donnees;
 
+import modele.Comparateur;
 import parser.Noeud;
 
 public abstract class DiagrammeObjets {
 
+	public static int SUPPR = 0;
+	public static int ADD = 1;
+	public static int MODIF = 2;
+	public static int IDEM = 3;
+	
 	protected Noeud noeud;
 	protected String id, classe;
 	protected Texte name;
 	protected int r, g, b;
+	protected int etat;
 	
 	public DiagrammeObjets(Noeud n){
 		this.noeud = n;
@@ -19,7 +26,8 @@ public abstract class DiagrammeObjets {
 		name = new Texte(noeud.getChildByName("m_name"));
 		id  = noeud.getChildByName("_id").getStringValue();
 		classe = getOutQuotes(noeud.getChildByName("m_pModelObject").getChildByName("_m2Class").getStringValue());
-		System.out.println("Objet "+name.getText()+" ("+classe+")");
+		etat = IDEM;
+//		System.out.println("Objet "+name.getText()+" ("+classe+")");
 //		r = -1; 
 //		g = -1;
 //		b = -1;
@@ -46,6 +54,15 @@ public abstract class DiagrammeObjets {
 	protected abstract void write();
 	protected abstract void initClass();
 	protected abstract boolean egal(DiagrammeObjets o);
+	
+	public String toString(){
+		String etat = "";
+		if (this.etat == ADD) etat = "ADD";
+		if (this.etat == SUPPR) etat = "SUPPR";
+		if (this.etat == MODIF) etat = "MODIF";
+		if (this.etat == IDEM) etat = "IDEM";
+		return name.getText()+" ("+classe+") etat : "+etat;
+	}
 	
 	public Noeud getNoeud() {
 		return noeud;
@@ -109,5 +126,24 @@ public abstract class DiagrammeObjets {
 
 	public void setB(int b) {
 		this.b = b;
+	}
+	
+	public void setRGB(int r, int g, int b){
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+
+	public int getEtat() {
+		return etat;
+	}
+
+	public void setEtat(int etat) {
+		if (etat == MODIF) setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+		else if (etat == SUPPR) setRGB(Comparateur.SUPPR_R, Comparateur.SUPPR_G, Comparateur.SUPPR_B);
+		else if (etat == ADD) setRGB(Comparateur.ADD_R, Comparateur.ADD_G, Comparateur.ADD_B);
+		else if (etat == IDEM) setRGB(-1, -1, -1);
+		name.setRGB(r, g, b);
+		this.etat = etat;
 	}
 }
