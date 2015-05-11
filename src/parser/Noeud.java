@@ -40,24 +40,49 @@ public class Noeud {
 		intValue = -8000;
 	}
 	
+//	public String toString(){
+//		String res = "";
+//		res += this.getName()+" { "+this.getClasse()+"\n";
+//		if (intValue != -8000) res+= intValue;
+//		if (stringValue != null) res += stringValue;
+//		if (childs != null) {
+//			for (Noeud n : childs) {
+//				res += n.toString();
+//			}
+//		}
+//		res += "\n";
+//		return res;
+//	}
+	
+//	public String toString(){
+//		String res = "";
+//		res += "nom : "+name+"\n";
+//		res += "childs ("+childs.size()+") : \n";
+//		for (Noeud n : childs) {
+//			res += "\t"+n.getName();
+//		}
+//		return res;
+//	}
+	
 	public String toString(){
 		String res = "";
-		res += this.getName()+" { "+this.getClasse()+"\n";
-		if (intValue != -8000) res+= intValue;
-		if (stringValue != null) res += stringValue;
-		if (childs != null) {
-			for (Noeud n : childs) {
-				res += n.toString();
-			}
+		res += name;
+		res += " ("+((childs == null) ? 0 : childs.size())+")";
+		res += " [";
+		for (Noeud no : childs) {
+			res += no.getName()+", ";
 		}
-		res += "\n";
+		res += "]";
 		return res;
 	}
 	
 	public Noeud getChildByName(String name){
-		Noeud n = null;
-		
-		return n;
+		for (Noeud no : childs) {
+			if (no.getName().equals(name)) {
+				return no;
+			}
+		}
+		return null;
 	}
 	
 	public int getChildCount(){

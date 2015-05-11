@@ -53,6 +53,7 @@ public class Parser2 {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		tree.setName("IProject");
 		return tree;
 	}
 
@@ -71,10 +72,10 @@ public class Parser2 {
 		n.setClasse(ligne.substring(mark+1, ligne.length()-1).replaceAll("\\s", ""));
 		bw.write("-->"+n.getClasse()+"\n");
 		ligne = br.readLine();
-		return parcourirNoe(n);
+		return parcourirNoeud(n);
 	}
 
-	private Noeud parcourirNoe(Noeud n) throws IOException{
+	private Noeud parcourirNoeud(Noeud n) throws IOException{
 		while(!ligne.contains("}")){
 			//Propriété
 			if (ligne.contains("- ")) {
@@ -84,7 +85,7 @@ public class Parser2 {
 				int beginNom = ligne.indexOf("- ")+"- ".length();
 				int endNom = ligne.indexOf("=")-1;
 				nom = ligne.substring(beginNom, endNom).replaceAll("\\s", "");
-				n.setName(nom);
+				//				n.setName(nom);
 				bw.write("nom : "+nom+"\n");
 				if (nom.equals("value") && ligne.contains(";")) {
 					sizePile.pop();
@@ -101,19 +102,19 @@ public class Parser2 {
 					stringValue = ligne.substring(beginValue+1, endValue);
 					if (stringValue.matches("\\s*-?\\d+\\s*")) {
 						intValue = Integer.parseInt(stringValue.replaceAll("\\s", ""));
-						n.getChilds().add(new Noeud(n.getName(), intValue, null, null));
+						n.getChilds().add(new Noeud(nom, intValue, null, null));
 					}else {
 						if (nom.equals("elementList"))
 							n.getChilds().add(new Noeud("", -8000, stringValue, null));
 						else
-							n.getChilds().add(new Noeud(n.getName(), -8000, stringValue, null));
+							n.getChilds().add(new Noeud(nom, -8000, stringValue, null));
 					}
 				}
 				else if (nom.equals("elementList")) {
 					intValue = Integer.valueOf(ligne.substring(endNom+3, ligne.indexOf(";")));
 					sizePile.push(intValue);
 					n.setIntValue(intValue);
-					n.getChilds().add(new Noeud(n.getName(), intValue, null, null));
+					n.getChilds().add(new Noeud(nom, intValue, null, null));
 
 					ligne = br.readLine();
 					ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
@@ -134,14 +135,24 @@ public class Parser2 {
 						stringValue += ligne;
 					}
 					stringValue = stringValue.substring(0, stringValue.indexOf(";"));
-					n.getChilds().add(new Noeud(n.getName(), -8000, stringValue, null));
+					n.getChilds().add(new Noeud(nom, -8000, stringValue, null));
 				}
 				//Une propriété qui est un noeud
 				else if (ligne.contains("=") && ligne.contains("{")) {
+					//System.out.println("nvlle prop noeud "+nom+": _"+n.getName()+"_");
 					Noeud t = creerNoeud();
 					ArrayList<Noeud> noeud = new ArrayList<Noeud>();
 					noeud.add(t);
-					n.getChilds().add(new Noeud(n.getName(), -8000, null, noeud));
+					//System.out.println("ajout de "+t.getName()+" à _"+n.getName()+"_, childs : "+n.getChildCount());
+					if (n.getChildCount() == 0 && !n.getName().equals("")) {
+						n.setName(t.getName());
+						n.setClasse(t.getClasse());
+						n.setIntValue(t.getIntValue());
+						n.setStringValue(t.getStringValue());
+						n.setChilds(t.getChilds());
+					}else
+						n.getChilds().add(new Noeud(nom, -8000, null, noeud));
+
 				}
 				// une propriété qui est une suite de noeuds
 				else if (nom.equals("value") && !ligne.contains(";")) {
@@ -154,7 +165,7 @@ public class Parser2 {
 						noeuds.add(t);
 
 					}
-					n.getChilds().add(new Noeud(n.getName(), -8000, null, noeuds));
+					n.getChilds().add(new Noeud(nom, -8000, null, noeuds));
 				}
 				else{
 					System.out.println("ERROR !!");

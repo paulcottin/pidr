@@ -6,6 +6,7 @@ public class DiagrammeObjets {
 
 	private Noeud noeud;
 	private String id, classe, name;
+	private Value value;
 	
 	public DiagrammeObjets() {
 		init();
@@ -21,6 +22,7 @@ public class DiagrammeObjets {
 		name = "";
 		id  ="";
 		classe = "";
+		value = new Value();
 	}
 
 	public Noeud getNoeud() {
@@ -53,5 +55,13 @@ public class DiagrammeObjets {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Value getValue() {
+		return value;
+	}
+
+	public void setValue(Value value) {
+		this.value = value;
 	}
 }
