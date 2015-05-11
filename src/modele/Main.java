@@ -43,7 +43,6 @@ public class Main {
 		
 		Comparateur c = new Comparateur(proj, proj2);
 		
-		
 		/**
 		 * Ecriture du projet dans un fichier
 		 */

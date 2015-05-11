@@ -31,6 +31,12 @@ public class Projet {
 		
 //		System.out.println("Projet "+nomProjet+" ("+typeProjet+"), modifié le "+lastModifiedDate+" : "+diagrammes.size()+" diagramme(s)");
 	}
+	
+	public void write(){
+		for (Diagramme d : diagrammes) {
+			d.write();
+		}
+	}
 
 	public String getNomProjet() {
 		return nomProjet;

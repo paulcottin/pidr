@@ -49,7 +49,7 @@ public class IAssociationEnd extends DiagrammeObjets{
 	
 	@Override
 	protected void write() {
-		writeGeneral();
+//		writeGeneral();
 		Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("value");
 		int totalSize = noeud.getChildByName("_properties").getChildByName("value").getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
 		String colors = addQuotes(r+","+g+","+b);

@@ -155,6 +155,20 @@ public class Diagramme {
 		for (int i = 0; i < correspondance.length; i++)
 			correspondance[i] = -1;
 	}
+	
+	/**
+	 * Ecris dans le Noeud les données de la classe (pour l'écriture ensuite dans le fichier via le Writer)
+	 */
+	public void write(){
+		noeud.getChildByName("_name").setStringValue(nomDiagramme);
+		noeud.getChildByName("_lastModifiedTime").setStringValue(dateModification);
+		noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").setStringValue(typeDiagramme);
+		noeud.getChildByName("_id").setStringValue(id);
+		for (DiagrammeObjets d : objets) {
+			d.writeGeneral();
+			d.write();
+		}
+	}
 
 	private String getClass(Noeud n){
 		return n.getChildByName("m_pModelObject").getChildByName("_m2Class").getStringValue().equals("\"\"") ? "" : n.getChildByName("m_pModelObject").getChildByName("_m2Class").getStringValue().split("\"")[1];

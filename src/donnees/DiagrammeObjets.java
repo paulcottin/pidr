@@ -55,6 +55,10 @@ public abstract class DiagrammeObjets {
 	protected abstract void initClass();
 	protected abstract boolean egal(DiagrammeObjets o);
 	
+	protected String constructRGB(int r, int g, int b){
+		return "\""+r+","+g+","+b+"\"";
+	}
+	
 	public String toString(){
 		String etat = "";
 		if (this.etat == ADD) etat = "ADD";
