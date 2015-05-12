@@ -136,6 +136,7 @@ public abstract class DiagrammeObjets {
 		this.r = r;
 		this.g = g;
 		this.b = b;
+		name.setRGB(r, g, b);
 	}
 
 	public int getEtat() {
