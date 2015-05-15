@@ -78,8 +78,10 @@ public class IAssociationEnd extends DiagrammeObjets{
 	protected boolean egal(DiagrammeObjets o) {
 		if (o instanceof IAssociationEnd) {
 			IAssociationEnd ob = (IAssociationEnd) o;
-			if (debut.equals(ob.getDebut()) && fin.equals(ob.getFin()) && debMultiplicity.equals(ob.getDebMultiplicity()) && finMultiplicity.equals(ob.getFinMultiplicity()) && debFleche.equals(ob.getDebFleche()) && finFleche.equals(ob.getFinFleche()) && typeFleche==ob.getTypeFleche())
+			if (debut.equals(ob.getDebut()) && fin.equals(ob.getFin()) && debMultiplicity.equals(ob.getDebMultiplicity()) && finMultiplicity.equals(ob.getFinMultiplicity()) && debFleche.equals(ob.getDebFleche()) && finFleche.equals(ob.getFinFleche()) && typeFleche==ob.getTypeFleche()){
+				modif.add("Association : "+debut+" - "+fin);
 				return true;
+			}
 			else
 				return false;
 		}

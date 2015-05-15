@@ -2,8 +2,9 @@ package rhapsodyClass;
 
 import java.util.ArrayList;
 
+import modele.Comparateur;
+
 import parser.Noeud;
-import parser.Parser2;
 import donnees.DiagrammeObjets;
 import donnees.Texte;
 
@@ -120,8 +121,12 @@ public class IClass extends DiagrammeObjets {
 	protected boolean egal(DiagrammeObjets objet) {
 		if (objet instanceof IClass) {
 			IClass o = (IClass) objet;
-			if (!name.getText().equals(o.getNameText())) return false;
-			if (attributs.size() != o.getAttributs().size() || operations.size() != o.getOperations().size()) return false;
+			if (!name.getText().equals(o.getNameText())) {
+				modif.add("nom : "+o.getNameText());
+				name.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+				return false;
+			}
+//			if (attributs.size() != o.getAttributs().size() || operations.size() != o.getOperations().size()) return false;
 			boolean test = false;
 			for (Texte t : attributs) {
 				test = false;
@@ -130,7 +135,11 @@ public class IClass extends DiagrammeObjets {
 						test = false;
 					}
 				}
-				if (!test) return false; 
+				if (!test) {
+					modif.add("attributs : "+o.getAttributs().toString());
+					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					return false; 
+				}
 			}
 			for (Texte t : operations) {
 				test = false;
@@ -139,7 +148,11 @@ public class IClass extends DiagrammeObjets {
 						test = false;
 					}
 				}
-				if (!test) return false; 
+				if (!test) {
+					modif.add("operations : "+o.getOperations().toString());
+					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					return false; 
+				}
 			}
 			return true;
 		}

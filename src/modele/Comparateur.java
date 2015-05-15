@@ -1,12 +1,13 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import donnees.Diagramme;
 import donnees.DiagrammeObjets;
 import donnees.Projet;
 
-public class Comparateur {
+public class Comparateur extends Observable implements Runnable{
 
 	public static int SUPPR_R = 255;
 	public static int SUPPR_G = 0;
@@ -17,18 +18,28 @@ public class Comparateur {
 	public static int MODIF_R = 255;
 	public static int MODIF_G = 153;
 	public static int MODIF_B = 0;
-	
 
 	private Projet premier, deuxieme;
+	private String diffs;
 	private int[] correspondance;
+	private boolean running;
 
+	public Comparateur(){
+		this.premier = null;
+		this.deuxieme = null;
+		this.running = false;
+		diffs = "";
+	}
+	
 	public Comparateur(Projet p1, Projet p2){
 		this.premier = p1;
 		this.deuxieme = p2;
-		init();
+		this.running = false;
+		run();
 	}
 
-	private void init(){
+	public void run(){
+		this.running = true;
 		int maxDiagrammeSize = premier.getDiagrammes().size() >= deuxieme.getDiagrammes().size() ? premier.getDiagrammes().size() : deuxieme.getDiagrammes().size();
 		initCorrespondance(maxDiagrammeSize);
 		ArrayList<Diagramme> list1 = (maxDiagrammeSize == premier.getDiagrammes().size() ? premier.getDiagrammes() : deuxieme.getDiagrammes());
@@ -63,6 +74,9 @@ public class Comparateur {
 			//Ne rien faire
 		else
 			System.out.println("ERROR (Comparateur - compare())");
+		writeDiff();
+		this.running = false;
+		update();
 	}
 
 	/**
@@ -136,6 +150,20 @@ public class Comparateur {
 			if (list2.size() != cpt) find = false; else find = true;
 		return find;
 	}
+	
+	private void writeDiff(){
+		for (Diagramme d : this.premier.getDiagrammes()) {
+			for (String s : d.getDiffString()) {
+				diffs += s+"\n";
+				System.out.println(s);
+			}
+		}
+	}
+	
+	private void update(){
+		setChanged();
+		notifyObservers();
+	}
 
 	public Projet getPremier() {
 		return premier;
@@ -143,6 +171,7 @@ public class Comparateur {
 
 	public void setPremier(Projet premier) {
 		this.premier = premier;
+		update();
 	}
 
 	public Projet getDeuxieme() {
@@ -151,5 +180,22 @@ public class Comparateur {
 
 	public void setDeuxieme(Projet deuxieme) {
 		this.deuxieme = deuxieme;
+		update();
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
+	public String getDiffs() {
+		return diffs;
+	}
+
+	public void setDiffs(String diffs) {
+		this.diffs = diffs;
 	}
 }

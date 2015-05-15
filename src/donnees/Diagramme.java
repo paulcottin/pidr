@@ -11,6 +11,7 @@ public class Diagramme {
 	private Noeud noeud;
 	private String nomDiagramme, dateModification, typeDiagramme, id;
 	private ArrayList<DiagrammeObjets> objets;
+	private ArrayList<String> diffString;
 	private int etat;
 	private int[] correspondance;
 
@@ -20,6 +21,7 @@ public class Diagramme {
 	}
 
 	private void init(){
+		diffString = new ArrayList<String>();
 		nomDiagramme = noeud.getChildByName("_name").getStringValue().split("\"")[1];
 		dateModification = noeud.getChildByName("_lastModifiedTime").getStringValue().split("\"")[1];
 		typeDiagramme = noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").getStringValue().split("\"")[1];
@@ -73,6 +75,7 @@ public class Diagramme {
 		for (int i = 0; i < list2.size(); i++) {
 			if (!list1.get(i).egal(list2.get(correspondance[i]))){
 				diff.add(list1.get(i));
+				diffString.addAll(list1.get(i).getModif());
 				list1.get(i).setEtat(DiagrammeObjets.MODIF);
 			}
 		}
@@ -91,13 +94,13 @@ public class Diagramme {
 		else
 			System.out.println("ERROR (Diagramme - compare())");
 
-		if (diff.size() == 0)
-			System.out.println("Aucune différence majeure");
-		else {
-			System.out.println("Différences : ");
-			for (DiagrammeObjets diagrammeObjets : diff)
-				System.out.println(diagrammeObjets);
-		}
+//		if (diff.size() == 0)
+//			System.out.println("Aucune différence majeure");
+//		else {
+//			System.out.println("Différences : ");
+//			for (DiagrammeObjets diagrammeObjets : diff)
+//				System.out.println(diagrammeObjets);
+//		}
 	}
 
 	/**
@@ -230,5 +233,13 @@ public class Diagramme {
 		for (DiagrammeObjets o : objets)
 			o.setEtat(etat);
 		this.etat = etat;
+	}
+
+	public ArrayList<String> getDiffString() {
+		return diffString;
+	}
+
+	public void setDiffString(ArrayList<String> diffString) {
+		this.diffString = diffString;
 	}
 }

@@ -1,5 +1,7 @@
 package donnees;
 
+import java.util.ArrayList;
+
 import modele.Comparateur;
 import parser.Noeud;
 
@@ -15,6 +17,7 @@ public abstract class DiagrammeObjets {
 	protected Texte name;
 	protected int r, g, b;
 	protected int etat;
+	protected ArrayList<String> modif;//, suppr, add;
 	
 	public DiagrammeObjets(Noeud n){
 		this.noeud = n;
@@ -27,6 +30,9 @@ public abstract class DiagrammeObjets {
 		id  = noeud.getChildByName("_id").getStringValue();
 		classe = getOutQuotes(noeud.getChildByName("m_pModelObject").getChildByName("_m2Class").getStringValue());
 		etat = IDEM;
+		modif = new ArrayList<String>();
+//		suppr = new ArrayList<String>();
+//		add = new ArrayList<String>();
 //		System.out.println("Objet "+name.getText()+" ("+classe+")");
 //		r = -1; 
 //		g = -1;
@@ -150,5 +156,13 @@ public abstract class DiagrammeObjets {
 		else if (etat == IDEM) setRGB(-1, -1, -1);
 		name.setRGB(r, g, b);
 		this.etat = etat;
+	}
+
+	public ArrayList<String> getModif() {
+		return modif;
+	}
+
+	public void setModif(ArrayList<String> modif) {
+		this.modif = modif;
 	}
 }
