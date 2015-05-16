@@ -4,6 +4,9 @@ import parser.Noeud;
 
 public class Texte {
 
+	/**
+	 * Classe qui implemente les zones de texte pour gerer les couleurs
+	 */
 	private Noeud noeud;
 	private String text;
 	private int r, g, b;

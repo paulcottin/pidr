@@ -24,16 +24,16 @@ public class IClass extends DiagrammeObjets {
 		int sizeComp = compNoeud.getChildByName("size").getIntValue();
 		for (int i = 0; i < sizeComp; i++) {
 			//Récupération des attributs
-			if (getOutQuotes(compNoeud.getChildByName("value").getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Attribute")){
-				Noeud attNoeud = compNoeud.getChildByName("value").getChilds().get(i).getChildByName("Items");
+			if (getOutQuotes(compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Attribute")){
+				Noeud attNoeud = compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("Items");
 				int sizeAtt = attNoeud.getChildByName("size").getIntValue();
 				for (int j = 0; j < sizeAtt; j++) {
 					System.out.println("ajout attribut "+i);
 				}
 			}
 			//Récupération des opérations
-			else if (getOutQuotes(compNoeud.getChildByName("value").getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Operation")){
-				Noeud attNoeud = compNoeud.getChildByName("value").getChilds().get(i).getChildByName("Items");
+			else if (getOutQuotes(compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Operation")){
+				Noeud attNoeud = compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("Items");
 				int sizeAtt = attNoeud.getChildByName("size").getIntValue();
 				for (int j = 0; j < sizeAtt; j++) {
 					System.out.println("ajout operation "+i);
@@ -42,14 +42,14 @@ public class IClass extends DiagrammeObjets {
 		}
 
 		if (noeud.getChildByName("_properties") != null) {
-			Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("value");
-			int totalSize = noeud.getChildByName("_properties").getChildByName("value").getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
+			Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1);
+			int totalSize = noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("value").getChildByName("Metaclasses").getChildByName("size").getIntValue();
 			//Récupération de la couleur du block
 			String colors = "";
 			for (int i = 0; i < totalSize; i++) {
 				if (typeProperties.getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
-					Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("value");
-					int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("size").getIntValue();
+					Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChilds().get(1);
+					int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChildByName("size").getIntValue();
 					for (int j = 0; j < size; j++) {
 						String type = properties.getChilds().get(j).getChildByName("_Type").getStringValue();
 						if (type.equals("Color")) {
@@ -73,15 +73,15 @@ public class IClass extends DiagrammeObjets {
 		Noeud compNoeud = noeud.getChildByName("Compartments");
 		int sizeComp = compNoeud.getChildByName("size").getIntValue();
 		for (int i = 0; i < sizeComp; i++) {
-			if (getOutQuotes(compNoeud.getChildByName("value").getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Attribute")){
-				Noeud attNoeud = compNoeud.getChildByName("value").getChilds().get(i).getChildByName("Items");
+			if (getOutQuotes(compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Attribute")){
+				Noeud attNoeud = compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("Items");
 				attNoeud.getChildByName("size").setIntValue(attributs.size());
 				for (int j = 0; j < attributs.size(); j++) {
 					System.out.println("écriture attribut "+i);
 				}
 			}
-			else if (getOutQuotes(compNoeud.getChildByName("value").getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Operation")){
-				Noeud attNoeud = compNoeud.getChildByName("value").getChilds().get(i).getChildByName("Items");
+			else if (getOutQuotes(compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("m_name").getStringValue()).equals("Operation")){
+				Noeud attNoeud = compNoeud.getChilds().get(1).getChilds().get(i).getChildByName("Items");
 				attNoeud.getChildByName("size").setIntValue(operations.size());
 				for (int j = 0; j < operations.size(); j++) {
 					System.out.println("écriture operation "+i);
@@ -92,20 +92,20 @@ public class IClass extends DiagrammeObjets {
 		if (r != -1) {
 			Noeud typeProperties;
 			if (noeud.getChildByName("_properties") != null) 
-				typeProperties =  noeud.getChildByName("_properties").getChildByName("value");
+				typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("value");
 			else{
 				typeProperties = constructProperties();
 				noeud.getChilds().add(1, typeProperties);
 			}
 
-			typeProperties = noeud.getChildByName("_properties").getChildByName("value");
-			int totalSize = noeud.getChildByName("_properties").getChildByName("value").getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
+			typeProperties = noeud.getChildByName("_properties").getChilds().get(1);
+			int totalSize = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
 			//Ecriture de la couleur
 			String colors = constructRGB(r, g, b);
 			for (int i = 0; i < totalSize; i++) {
 				if (typeProperties.getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
 					Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("value");
-					int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("size").getIntValue();
+					int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChildByName("size").getIntValue();
 					for (int j = 0; j < size; j++) {
 						String type = properties.getChilds().get(j).getChildByName("_Type").getStringValue();
 						if (type.equals("Color")) {
@@ -119,6 +119,7 @@ public class IClass extends DiagrammeObjets {
 
 	@Override
 	protected boolean egal(DiagrammeObjets objet) {
+		modif.clear();
 		if (objet instanceof IClass) {
 			IClass o = (IClass) objet;
 			if (!name.getText().equals(o.getNameText())) {

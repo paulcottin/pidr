@@ -2,6 +2,11 @@ package donnees;
 
 import parser.Noeud;
 
+/**
+ * ??
+ * @author paul
+ *
+ */
 public class Value {
 	
 	private String stringValue;

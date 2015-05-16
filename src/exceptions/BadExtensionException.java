@@ -2,6 +2,11 @@ package exceptions;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Erreur d'extension de fichier lors de l'enregistrement.
+ * @author paul
+ *
+ */
 public class BadExtensionException {
 	
 	private String good, bad;
@@ -13,7 +18,7 @@ public class BadExtensionException {
 	}
 	
 	private void execute(){
-		JOptionPane.showMessageDialog(null, "You must give a \"."+good+"\" file, not a \""+bad+"\" file ", "Bad file extension!", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Vous devez donner un fichier \"."+good+"\" et non un \"."+bad+"\" file ", "Erreur d'extension !", JOptionPane.ERROR_MESSAGE);
 	}
 
 }

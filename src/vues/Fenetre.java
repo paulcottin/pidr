@@ -1,10 +1,17 @@
 package vues;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import modele.Comparateur;
 
+/**
+ * Fenetre principale de l'application
+ * @author paul
+ *
+ */
 public class Fenetre extends JFrame{
 
 	/**
@@ -24,7 +31,9 @@ public class Fenetre extends JFrame{
 		this.c = c;
 		
 		this.container = new JPanel();
-		this.container.add(new DifferencesPanel(c));
+		this.container.setLayout(new BorderLayout());
+		this.container.add(new FilesInformations(c), BorderLayout.NORTH);
+		this.container.add(new DifferencesPanel(c), BorderLayout.CENTER);
 		
 		this.setContentPane(container);
 		

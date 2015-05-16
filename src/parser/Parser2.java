@@ -9,6 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * Gere la lecture du fichier et la constitution de l'arbre de Noeud
+ * @author paul
+ *
+ */
 public class Parser2 {
 
 	private String path, initLigne;
@@ -69,6 +74,7 @@ public class Parser2 {
 			n.setName(nom);
 		}
 		int mark = ligne.indexOf("{");
+
 		n.setClasse(ligne.substring(mark+1, ligne.length()-1).replaceAll("\\s", ""));
 		bw.write("-->"+n.getClasse()+"\n");
 		ligne = br.readLine();
@@ -143,15 +149,7 @@ public class Parser2 {
 					Noeud t = creerNoeud();
 					ArrayList<Noeud> noeud = new ArrayList<Noeud>();
 					noeud.add(t);
-					//System.out.println("ajout de "+t.getName()+" à _"+n.getName()+"_, childs : "+n.getChildCount());
-					if (n.getChildCount() == 0 && !n.getName().equals("")) {
-						n.setName(t.getName());
-						n.setClasse(t.getClasse());
-						n.setIntValue(t.getIntValue());
-						n.setStringValue(t.getStringValue());
-						n.setChilds(t.getChilds());
-					}else
-						n.getChilds().add(new Noeud(nom, -8000, null, noeud));
+					n.getChilds().add(new Noeud(nom, -8000, null, noeud));
 
 				}
 				// une propriété qui est une suite de noeuds

@@ -6,6 +6,11 @@ import parser.Parser2;
 import parser.Writer;
 import vues.Fenetre;
 
+/**
+ * Lance le comparateur de fichiers rhapsody
+ * @author paul
+ *
+ */
 public class Main {
 	
 	public static void main(String[] args){
@@ -25,8 +30,8 @@ public class Main {
 //		System.out.println(n.getChilds().size());
 //		System.out.println(n.getChilds().get(0).getName()+"("+n.getChilds().get(0).getChilds()+")");
 //		System.out.println(n.getChilds().get(1).getName()+"("+n.getChilds().get(1).getChilds()+")");
-//		System.out.println(n.getChilds().get(2).getName()+"("+n.getChilds().get(2).getChilds()+")");
-//		System.out.println(n.getChilds().get(2).getChilds().get(0).getName()+"("+n.getChilds().get(2).getChilds()+")");
+//		System.out.println(n.getChilds().get(2).getName()+"("+n.getChilds().get(2).getChilds()+"), classe : "+n.getChilds().get(2).getClasse());
+//		System.out.println(n.getChilds().get(2).getChilds().get(0).getName()+"("+n.getChilds().get(2).getChilds().get(0).getChilds()+")");
 //		System.out.println(n.getChilds().get(2).getChilds().get(0).getChilds().get(1).getChilds().get(0));
 //		System.out.println("--");
 

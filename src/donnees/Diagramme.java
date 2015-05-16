@@ -2,10 +2,18 @@ package donnees;
 
 import java.util.ArrayList;
 
+import exceptions.BadDiagramCorrespondance;
+
 import parser.Noeud;
 import rhapsodyClass.IAssociationEnd;
 import rhapsodyClass.IClass;
 
+/**
+ * Plusieurs diagrammes composent un projet. Ils sont caracterises par un type, un nom et un id.
+ * Exemple de diagramme : Diagramme de block sous Rhapsody.
+ * @author paul
+ *
+ */
 public class Diagramme {
 
 	private Noeud noeud;
@@ -24,7 +32,7 @@ public class Diagramme {
 		diffString = new ArrayList<String>();
 		nomDiagramme = noeud.getChildByName("_name").getStringValue().split("\"")[1];
 		dateModification = noeud.getChildByName("_lastModifiedTime").getStringValue().split("\"")[1];
-		typeDiagramme = noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").getStringValue().split("\"")[1];
+		typeDiagramme = noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").getStringValue().split("\"")[1];
 		id = noeud.getChildByName("_id").getStringValue();
 		Noeud listDiag = noeud.getChildByName("_graphicChart").getChilds().get(noeud.getChildByName("_graphicChart").getChilds().indexOf(noeud.getChildByName("_graphicChart").getChildByName("elementList"))+1);
 		objets = new ArrayList<DiagrammeObjets>();
@@ -44,7 +52,6 @@ public class Diagramme {
 			}
 		}
 		etat = DiagrammeObjets.IDEM;
-		//		System.out.println("Diagramme "+nomDiagramme+" ("+typeDiagramme+") constitué de "+objets.size()+" objets");
 	}
 
 	/**
@@ -70,6 +77,7 @@ public class Diagramme {
 	 * @param list2 avec elle
 	 */
 	private void compare(ArrayList<DiagrammeObjets> list1, ArrayList<DiagrammeObjets> list2, Diagramme d){
+		diffString.clear();
 		ArrayList<DiagrammeObjets> diff = new ArrayList<DiagrammeObjets>();
 		//on compare les diagrammes en commun
 		for (int i = 0; i < list2.size(); i++) {
@@ -93,20 +101,12 @@ public class Diagramme {
 		//Ne rien faire
 		else
 			System.out.println("ERROR (Diagramme - compare())");
-
-//		if (diff.size() == 0)
-//			System.out.println("Aucune différence majeure");
-//		else {
-//			System.out.println("Différences : ");
-//			for (DiagrammeObjets diagrammeObjets : diff)
-//				System.out.println(diagrammeObjets);
-//		}
 	}
 
 	/**
 	 * faire la correspondance entre les différents objets afin de comparer les bons entre eux.
 	 * 
-	 * On commence à essayer avec les id des objets
+	 * On procede avec les id des objets
 	 * 
 	 * @param list1 : la 1ère liste de diagrammes
 	 * @param list2 : la 2ème liste de diagrammes
@@ -122,7 +122,7 @@ public class Diagramme {
 
 		find = correspondanceOK(list1, list2);
 		if (!find)
-			System.out.println("correspondance des objets impossible");
+			new BadDiagramCorrespondance();
 		else
 			System.out.println("correspondance objets ok !");
 	}
@@ -165,7 +165,7 @@ public class Diagramme {
 	public void write(){
 		noeud.getChildByName("_name").setStringValue(nomDiagramme);
 		noeud.getChildByName("_lastModifiedTime").setStringValue(dateModification);
-		noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").setStringValue(typeDiagramme);
+		noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").setStringValue(typeDiagramme);
 		noeud.getChildByName("_id").setStringValue(id);
 		for (DiagrammeObjets d : objets) {
 			d.writeGeneral();

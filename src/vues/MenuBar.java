@@ -10,9 +10,15 @@ import javax.swing.JMenuItem;
 import modele.Comparateur;
 
 import controlleurs.ChoixFichierController;
+import controlleurs.EnregistrerController;
 import controlleurs.QuitterController;
 import controlleurs.RunController;
 
+/**
+ * Barre de menu
+ * @author paul
+ *
+ */
 public class MenuBar extends JMenuBar implements Observer{
 
 	/**
@@ -42,6 +48,7 @@ public class MenuBar extends JMenuBar implements Observer{
 		choixfichier2 = new JMenuItem("Choix fichier 2");
 		choixfichier2.addActionListener(new ChoixFichierController(c, 2));
 		enregistrer = new JMenuItem("Enregistrer");
+		enregistrer.addActionListener(new EnregistrerController(c));
 		enregistrer.setEnabled(false);
 		
 		execution = new JMenu("Lancer");
@@ -67,7 +74,9 @@ public class MenuBar extends JMenuBar implements Observer{
 	public void update(Observable arg0, Object arg1) {
 		if (c.getPremier() != null && c.getDeuxieme() != null) {
 			compare.setEnabled(true);
+			enregistrer.setEnabled(true);
 		}
+		
 	}
 
 }

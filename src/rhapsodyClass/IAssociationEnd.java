@@ -15,13 +15,13 @@ public class IAssociationEnd extends DiagrammeObjets{
 	}
 	
 	public void initClass(){
-		Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("value");
-		int totalSize = noeud.getChildByName("_properties").getChildByName("value").getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
+		Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1);
+		int totalSize = noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("value").getChildByName("Metaclasses").getChildByName("size").getIntValue();
 		String colors = "";
 		for (int i = 0; i < totalSize; i++) {
 			if (typeProperties.getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
-				Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("value");
-				int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("size").getIntValue();
+				Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChilds().get(1);
+				int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChildByName("size").getIntValue();
 				for (int j = 0; j < size; j++) {
 					String type = properties.getChilds().get(j).getChildByName("_Type").getStringValue();
 					if (type.equals("Color")) {
@@ -50,13 +50,13 @@ public class IAssociationEnd extends DiagrammeObjets{
 	@Override
 	protected void write() {
 //		writeGeneral();
-		Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("value");
-		int totalSize = noeud.getChildByName("_properties").getChildByName("value").getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
+		Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1);
+		int totalSize = noeud.getChildByName("_properties").getChildByName("Subject").getChildByName("value").getChildByName("Metaclasses").getChildByName("size").getIntValue();
 		String colors = addQuotes(r+","+g+","+b);
 		for (int i = 0; i < totalSize; i++) {
 			if (typeProperties.getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
 				Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("value");
-				int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("size").getIntValue();
+				int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChildByName("size").getIntValue();
 				for (int j = 0; j < size; j++) {
 					String type = properties.getChilds().get(j).getChildByName("_Type").getStringValue();
 					if (type.equals("Color")) {
@@ -76,6 +76,7 @@ public class IAssociationEnd extends DiagrammeObjets{
 	
 	@Override
 	protected boolean egal(DiagrammeObjets o) {
+		modif.clear();
 		if (o instanceof IAssociationEnd) {
 			IAssociationEnd ob = (IAssociationEnd) o;
 			if (debut.equals(ob.getDebut()) && fin.equals(ob.getFin()) && debMultiplicity.equals(ob.getDebMultiplicity()) && finMultiplicity.equals(ob.getFinMultiplicity()) && debFleche.equals(ob.getDebFleche()) && finFleche.equals(ob.getFinFleche()) && typeFleche==ob.getTypeFleche()){

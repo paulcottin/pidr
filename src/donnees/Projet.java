@@ -5,7 +5,11 @@ import parser.Noeud;
 
 public class Projet {
 
-	private String nomProjet, typeProjet;
+	/**
+	 * Classe qui implemente un projet rhapsody
+	 * Initialise la correspondance entre les diffenrents diagramme et lance la comparaison.
+	 */
+	private String nomProjet, typeProjet, id;
 	private Noeud noeud;
 	private ArrayList<Diagramme> diagrammes;
 	private String lastModifiedDate;
@@ -17,19 +21,17 @@ public class Projet {
 	}
 	
 	private void init(){
+		id = noeud.getChildByName("_id").getStringValue();
 		diagrammes = new ArrayList<Diagramme>();
 		nomProjet = noeud.getChildByName("_name").getStringValue().split("\"")[1];
 		lastModifiedDate = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
-		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChilds().get(0).getChildByName("_name").getStringValue().split("\"")[1];
+		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").getStringValue().split("\"")[1];
 		diagrammes = new ArrayList<Diagramme>();
 		int nbDiagrammes = noeud.getChildByName("Diagrams").getChildByName("size").getIntValue()-1;
-//		System.out.println(noeud.getChildByName("Diagrams").getChildByName("value").getChilds().get(0));
+		
 		for (int i = 0; i < nbDiagrammes; i++) {
-			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChildByName("value").getChilds().get(1+i)));
+			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChilds().get(1).getChilds().get(1+i)));
 		}
-		
-		
-//		System.out.println("Projet "+nomProjet+" ("+typeProjet+"), modifié le "+lastModifiedDate+" : "+diagrammes.size()+" diagramme(s)");
 	}
 	
 	public void write(){
@@ -84,5 +86,13 @@ public class Projet {
 
 	public void setCorrespondance(int[] correspondance) {
 		this.correspondance = correspondance;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

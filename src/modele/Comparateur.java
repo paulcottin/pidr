@@ -6,7 +6,16 @@ import java.util.Observable;
 import donnees.Diagramme;
 import donnees.DiagrammeObjets;
 import donnees.Projet;
+import exceptions.BadDiagramCorrespondance;
+import exceptions.BadProjectCorrespondance;
 
+/**
+ * Gere la comparaison de deux projets
+ * Recupere les differences dans diffs
+ * Conserve les paths des fichiers compares, la premiere ligne du fichier d'origine
+ * @author paul
+ *
+ */
 public class Comparateur extends Observable implements Runnable{
 
 	public static int SUPPR_R = 255;
@@ -22,24 +31,35 @@ public class Comparateur extends Observable implements Runnable{
 	private Projet premier, deuxieme;
 	private String diffs;
 	private int[] correspondance;
-	private boolean running;
+	private boolean running, comparaisonDone;
+	private String path1, path2;
+	private String initLigne;
 
 	public Comparateur(){
+		init();
+	}
+
+	public Comparateur(Projet p1, Projet p2){
+		init();
+		this.premier = p1;
+		this.deuxieme = p2;
+		run();
+	}
+
+	private void init(){
 		this.premier = null;
 		this.deuxieme = null;
 		this.running = false;
-		diffs = "";
-	}
-	
-	public Comparateur(Projet p1, Projet p2){
-		this.premier = p1;
-		this.deuxieme = p2;
-		this.running = false;
-		run();
+		this.path1 = null;
+		this.path2 = null;
+		this.diffs = "";
+		this.comparaisonDone = false;
+		this.initLigne = "";
 	}
 
 	public void run(){
 		this.running = true;
+		diffs = "";
 		int maxDiagrammeSize = premier.getDiagrammes().size() >= deuxieme.getDiagrammes().size() ? premier.getDiagrammes().size() : deuxieme.getDiagrammes().size();
 		initCorrespondance(maxDiagrammeSize);
 		ArrayList<Diagramme> list1 = (maxDiagrammeSize == premier.getDiagrammes().size() ? premier.getDiagrammes() : deuxieme.getDiagrammes());
@@ -49,7 +69,7 @@ public class Comparateur extends Observable implements Runnable{
 
 		compare(list1, list2);
 	}
-	
+
 	/**
 	 * Lance la comparaison en appellant la méthode compareTo du type Diagramme
 	 * @param list1 liste à comparer
@@ -71,52 +91,39 @@ public class Comparateur extends Observable implements Runnable{
 				list1.get(i).setEtat(DiagrammeObjets.ADD);
 		}
 		else if (list1.size() == list2.size()){}
-			//Ne rien faire
+		//Ne rien faire
 		else
 			System.out.println("ERROR (Comparateur - compare())");
 		writeDiff();
 		this.running = false;
+		this.comparaisonDone = true;
 		update();
 	}
 
 	/**
 	 * faire la correspondance entre les différents diagrammes afin de comparer les bons entre eux.
-	 * A la fin de cette étape il faut demander confirmation à l'utilisateur
 	 * 
-	 * On commenceà essayer avec les noms, puis le nombre d'objets avant de demander 
-	 * quel diagramme corresond auquel à l'utilisateur
+	 * On prodece avec les ids des diagrammes
 	 * 
 	 * @param list1 : la 1ère liste de diagrammes
 	 * @param list2 : la 2ème liste de diagrammes
 	 */
 	private void doCorrespondance(ArrayList<Diagramme> list1, ArrayList<Diagramme> list2){
-		boolean find = true;
-		//Avec les noms 
-		for (int i = 0; i < list1.size(); i++) {
-			for (int j = 0; j < list2.size(); j++) {
-				if (list1.get(i).getNomDiagramme().equals(list2.get(j).getNomDiagramme())) correspondance[i] = j;
-			}
-		}		
-		find = correspondanceOK(list1, list2);
+		//Correspondance des projets
+		if (!premier.getId().equals(deuxieme.getId())) new BadProjectCorrespondance();
+		else{
+			boolean find = true;
+			//Avec les IDs
+			for (int i = 0; i < list1.size(); i++) 
+				for (int j = 0; j < list2.size(); j++)
+					if (list1.get(i).getId().equals(list2.get(j).getId())) correspondance[i] = j;
 
-		//Si noms ont changés on passe aux types
-		if (!find) {
-			for (int i = 0; i < list1.size(); i++) {
-				if (correspondance[i] != -1) {
-					for (int j = 0; j < list2.size(); j++) {
-						if (list1.get(i).getObjets().size() == list2.get(j).getObjets().size())
-							correspondance[i] = j;
-
-					}
-				}
-			}
+			find = correspondanceOK(list1, list2);
+			if (!find)
+				new BadDiagramCorrespondance();
+			else
+				System.out.println("correspondance diagrammes ok !");
 		}
-		
-		find = correspondanceOK(list1, list2);
-		if (!find)
-			System.out.println("correspondance des diagrammes impossible");
-		else
-			System.out.println("correspondance diagrammes ok !");
 	}
 
 	/**
@@ -128,7 +135,7 @@ public class Comparateur extends Observable implements Runnable{
 		for (int i = 0; i < correspondance.length; i++)
 			correspondance[i] = -1;
 	}
-	
+
 	/**
 	 * Check si la correspondance est finie ou pas
 	 * @param list1 les deux listes 
@@ -150,7 +157,7 @@ public class Comparateur extends Observable implements Runnable{
 			if (list2.size() != cpt) find = false; else find = true;
 		return find;
 	}
-	
+
 	private void writeDiff(){
 		for (Diagramme d : this.premier.getDiagrammes()) {
 			for (String s : d.getDiffString()) {
@@ -159,7 +166,7 @@ public class Comparateur extends Observable implements Runnable{
 			}
 		}
 	}
-	
+
 	private void update(){
 		setChanged();
 		notifyObservers();
@@ -197,5 +204,41 @@ public class Comparateur extends Observable implements Runnable{
 
 	public void setDiffs(String diffs) {
 		this.diffs = diffs;
+	}
+
+	public String getPath1() {
+		return path1;
+	}
+
+	public void setPath1(String path1) {
+		this.path1 = path1;
+		this.comparaisonDone = false;
+		update();
+	}
+
+	public String getPath2() {
+		return path2;
+	}
+
+	public void setPath2(String path2) {
+		this.path2 = path2;
+		this.comparaisonDone = false;
+		update();
+	}
+
+	public boolean isComparaisonDone() {
+		return comparaisonDone;
+	}
+
+	public void setComparaisonDone(boolean comparaisonDone) {
+		this.comparaisonDone = comparaisonDone;
+	}
+
+	public String getInitLigne() {
+		return initLigne;
+	}
+
+	public void setInitLigne(String initLigne) {
+		this.initLigne = initLigne;
 	}
 }

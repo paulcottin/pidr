@@ -16,6 +16,11 @@ import parser.Parser2;
 
 import modele.Comparateur;
 
+/**
+ * Listener pour le choix des deux fichier .rpy a comparer
+ * @author paul
+ *
+ */
 public class ChoixFichierController implements ActionListener{
 
 	private Comparateur c;
@@ -39,11 +44,14 @@ public class ChoixFichierController implements ActionListener{
 				if (extension.equals("rpy")) {
 					Parser2 p = new Parser2(f.getPath());
 					Noeud n = p.parse();
+					c.setInitLigne(p.getInitLigne());
 					if (choixFichier == 1){
 						c.setPremier(new Projet(n));
+						c.setPath1(f.getName());
 					}
 					else if (choixFichier == 2) {
 						c.setDeuxieme(new Projet(n));
+						c.setPath2(f.getName());
 					}
 				}else
 					new BadExtensionException("rpy", extension);

@@ -5,6 +5,11 @@ import java.awt.event.ActionListener;
 
 import modele.Comparateur;
 
+/**
+ * Listener pour quitter le programme
+ * @author paul
+ *
+ */
 public class QuitterController implements ActionListener{
 
 	Comparateur c;

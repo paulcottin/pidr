@@ -9,6 +9,11 @@ import vues.ProgressBar;
 
 import modele.Comparateur;
 
+/**
+ * Listener pour lancer la comparaison des deux fichiers
+ * @author paul
+ *
+ */
 public class RunController implements ActionListener{
 
 	private Comparateur c;

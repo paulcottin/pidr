@@ -2,6 +2,13 @@ package parser;
 
 import java.util.ArrayList;
 
+/**
+ * Noeud de l'arbre construit lors du parsing d'un fichier .rpy
+ * Contient des fils : childs ou une stringValue, une IntValue
+ * Possede un nom et une classe (classe definie dans rhapsody)
+ * @author paul
+ *
+ */
 public class Noeud {
 
 	private ArrayList<Noeud> childs;
@@ -82,7 +89,8 @@ public class Noeud {
 	public Noeud getChildByName(String name){
 		for (Noeud no : childs) {
 			if (no.getName().equals(name)) {
-				if (no.getChilds() != null && no.getChilds().get(0).getChilds() != null && !no.getName().equals("value")) return no.getChilds().get(0);
+				//if (no.getChilds() != null && no.getChilds().get(0).getChilds() != null && !no.getName().equals("value")) return no.getChilds().get(0);
+				if (no.getChilds() != null) return no.getChilds().get(0); 
 				else return no;
 			}
 		}

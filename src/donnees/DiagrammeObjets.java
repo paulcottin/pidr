@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import modele.Comparateur;
 import parser.Noeud;
 
+/**
+ * Classe abstraite qui gère tous les elements d'un diagramme.
+ * Cette classe initialise les donnes communes a chaque objet donc l'id.
+ * @author paul
+ *
+ */
 public abstract class DiagrammeObjets {
 
 	public static int SUPPR = 0;
@@ -25,6 +31,9 @@ public abstract class DiagrammeObjets {
 		initClass();
 	}
 	
+	/**
+	 * Initialisation de la classe
+	 */
 	private void init(){
 		name = new Texte(noeud.getChildByName("m_name"));
 		id  = noeud.getChildByName("_id").getStringValue();
@@ -39,6 +48,9 @@ public abstract class DiagrammeObjets {
 //		b = -1;
 	}
 	
+	/**
+	 * Ecrit sur le noeud les donnees representant l'id, le nom et le type d'objet (la classe Rhapsody)
+	 */
 	protected void writeGeneral(){
 		name.write();
 		noeud.getChildByName("m_pModelObject").getChildByName("_name").setStringValue(addQuotes(name.getText()));
@@ -46,6 +58,11 @@ public abstract class DiagrammeObjets {
 		noeud.getChildByName("m_pModelObject").getChildByName("_m2Class").setStringValue(addQuotes(classe));
 	}
 	
+	/**
+	 * Enlève les " d'une chaine de caracteres
+	 * @param string : la chaine avec "
+	 * @return : la chaine sans "
+	 */
 	protected String getOutQuotes(String string){
 		if (string.contains("\""))
 			return string.split("\"")[1];
@@ -53,12 +70,31 @@ public abstract class DiagrammeObjets {
 			return string;
 	}
 	
+	/**
+	 * Ajoute des " a une chaine de carateres
+	 * @param string : chaine sans "
+	 * @return : chaine avec "
+	 */
 	protected String addQuotes(String string){
 		return "\""+string+"\"";
 	}
 	
+	/**
+	 * Methode abstraite pour que chaque objet puisse ecrire sur le noeud les eventuelles modifications
+	 */
 	protected abstract void write();
+	
+	/**
+	 * Methode abstraite dans laquelle chaque classe definie ses elements propres
+	 */
 	protected abstract void initClass();
+	
+	/**
+	 * Methode abstraite de comparaison d'objets entre eux
+	 * @param o : l'objet a comparer
+	 * @return : true si les objets sont identiques, false sinon
+	 * Cette methode enregistre les differences dans une liste modif
+	 */
 	protected abstract boolean egal(DiagrammeObjets o);
 	
 	protected String constructRGB(int r, int g, int b){
@@ -72,6 +108,15 @@ public abstract class DiagrammeObjets {
 		if (this.etat == MODIF) etat = "MODIF";
 		if (this.etat == IDEM) etat = "IDEM";
 		return name.getText()+" ("+classe+") etat : "+etat;
+	}
+	
+	public void setEtat(int etat) {
+		if (etat == MODIF) setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+		else if (etat == SUPPR) setRGB(Comparateur.SUPPR_R, Comparateur.SUPPR_G, Comparateur.SUPPR_B);
+		else if (etat == ADD) setRGB(Comparateur.ADD_R, Comparateur.ADD_G, Comparateur.ADD_B);
+		else if (etat == IDEM) setRGB(-1, -1, -1);
+		name.setRGB(r, g, b);
+		this.etat = etat;
 	}
 	
 	public Noeud getNoeud() {
@@ -147,15 +192,6 @@ public abstract class DiagrammeObjets {
 
 	public int getEtat() {
 		return etat;
-	}
-
-	public void setEtat(int etat) {
-		if (etat == MODIF) setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
-		else if (etat == SUPPR) setRGB(Comparateur.SUPPR_R, Comparateur.SUPPR_G, Comparateur.SUPPR_B);
-		else if (etat == ADD) setRGB(Comparateur.ADD_R, Comparateur.ADD_G, Comparateur.ADD_B);
-		else if (etat == IDEM) setRGB(-1, -1, -1);
-		name.setRGB(r, g, b);
-		this.etat = etat;
 	}
 
 	public ArrayList<String> getModif() {

@@ -8,6 +8,11 @@ import javax.swing.JProgressBar;
 
 import modele.Comparateur;
 
+/**
+ * Barre de progression lors des parsing et comparaison un peu long
+ * @author paul
+ *
+ */
 public class ProgressBar extends JFrame implements Observer{
 
 	/**

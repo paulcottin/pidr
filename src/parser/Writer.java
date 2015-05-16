@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Ecrit dans un fichier le contenu d'un arbre de Noeud.
+ * @author paul
+ *
+ */
 public class Writer {
 	
 	private Noeud noeud;
@@ -51,9 +56,12 @@ public class Writer {
 			bw.write("{ "+n.getClasse()+"\n");
 			decalage++;
 		}
+//		System.out.println(n.getName()+" ("+n.getClasse()+") : "+n.getChilds());
+//		if (n.getName().equals("Subjects")) bw.write(writeDecalage()+"- "+n.getName()+"\n");
 		if (n.getChilds() != null) {
 			if (n.getChildCount() > 0) {
 				for (Noeud noeud : n.getChilds()) {
+//					System.out.println("write noeud helper de "+noeud.getName());
 					writeNoeudHelper(noeud);
 				}
 			}
@@ -63,6 +71,7 @@ public class Writer {
 	}
 	
 	private void writeNoeudHelper(Noeud n) throws IOException{
+		
 		if (n.getName().equals("size")) {
 			this.size = n.getIntValue();
 		}
@@ -72,6 +81,7 @@ public class Writer {
 		}
 		//Si c'est un noeud
 		else {
+			
 			bw.write(writeDecalage()+""+((!n.getName().equals("") ? "- " : ""))+n.getName()+""+((!n.getName().equals("") ? " = " : "")));
 			
 			if (n.getName().equals("value")) {
