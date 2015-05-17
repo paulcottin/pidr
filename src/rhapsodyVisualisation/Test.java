@@ -39,7 +39,11 @@ public class Test {
 		IRPProject project = app.activeProject();
 		IRPDiagram diag = (IRPDiagram) project.getComponentDiagrams().getItem(0);
 		IRPCollection diagrammes = diag.getGraphicalElements();
-		System.out.println(diagrammes.getItem(0).toString());
+		IRPDiagram mainElement = diag.getMainDiagram();
+		//Test d'enregistrement en une image (format EMF)
+		diag.getPicture("image1");
+		//Test d'enregistrement en une image (format JPG)
+		diag.getPictureAs("testJPG", "JPG", 0, diagrammes);
 		
 	}
 
