@@ -59,7 +59,8 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 		System.out.println(project.findElementByGUID("GUID 158dc38e-b3c0-409f-b6b0-095b6bc1ef84").getDisplayName()); //block1
 		System.out.println(project.findElementByGUID("GUID d935ccec-1611-40a6-bbd1-7056accc5c69").getDisplayName()); //Structure1 ?
 		IRPDiagram diag = (IRPDiagram) project.findElementByGUID("GUID d935ccec-1611-40a6-bbd1-7056accc5c69");
-		diag.getPicture("C:\\Users\\paul\\Desktop\\image1.emf");
+//		diag.getPicture("C:\\Users\\paul\\Desktop\\image1.emf");
+		diag.getPictureAs("C:\\Users\\paul\\Desktop\\image1.jpg", "JPG", 0, null);
 		try {
 			img = ImageIO.read(new File("C:\\Users\\paul\\Desktop\\ordres.jpg"));
 			System.out.println("img read : ");
