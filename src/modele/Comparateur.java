@@ -1,8 +1,11 @@
 package modele;
 
+import interfaces.LongTask;
+
 import java.util.ArrayList;
 import java.util.Observable;
 
+import rhapsodyVisualisation.Visualiser;
 import donnees.Diagramme;
 import donnees.DiagrammeObjets;
 import donnees.Projet;
@@ -16,7 +19,7 @@ import exceptions.BadProjectCorrespondance;
  * @author paul
  *
  */
-public class Comparateur extends Observable implements Runnable{
+public class Comparateur extends Observable implements Runnable, LongTask{
 
 	public static int SUPPR_R = 255;
 	public static int SUPPR_G = 0;
@@ -34,6 +37,7 @@ public class Comparateur extends Observable implements Runnable{
 	private boolean running, comparaisonDone;
 	private String path1, path2;
 	private String initLigne;
+	private Visualiser vis;
 
 	public Comparateur(){
 		init();
@@ -55,6 +59,7 @@ public class Comparateur extends Observable implements Runnable{
 		this.diffs = "";
 		this.comparaisonDone = false;
 		this.initLigne = "";
+		this.vis = new Visualiser(this);
 	}
 
 	public void run(){
@@ -166,6 +171,11 @@ public class Comparateur extends Observable implements Runnable{
 			}
 		}
 	}
+	
+	public void constructImage(){
+		Thread t = new Thread(vis);
+		t.start();
+	}
 
 	private void update(){
 		setChanged();
@@ -209,9 +219,18 @@ public class Comparateur extends Observable implements Runnable{
 	public String getPath1() {
 		return path1;
 	}
+	
+	public String getName1(){
+		if (path1.contains("\\\\")) 
+			return path1.split("\\\\")[path1.split("\\\\").length-1];
+		else if (path1.contains("/"))
+			return path1.split("/")[path1.split("/").length-1];
+		else
+			return null;
+	}
 
 	public void setPath1(String path1) {
-		this.path1 = path1;
+		this.path1 = path1.replace("\\", "\\\\");
 		this.comparaisonDone = false;
 		update();
 	}
@@ -219,9 +238,18 @@ public class Comparateur extends Observable implements Runnable{
 	public String getPath2() {
 		return path2;
 	}
+	
+	public String getName2(){
+		if (path2.contains("\\")) 
+			return path2.split("\\\\")[path2.split("\\\\").length-1];
+		else if (path2.contains("/"))
+			return path2.split("/")[path2.split("/").length-1];
+		else
+			return null;
+	}
 
 	public void setPath2(String path2) {
-		this.path2 = path2;
+		this.path2 = path2.replace("\\", "\\\\");
 		this.comparaisonDone = false;
 		update();
 	}
@@ -240,5 +268,13 @@ public class Comparateur extends Observable implements Runnable{
 
 	public void setInitLigne(String initLigne) {
 		this.initLigne = initLigne;
+	}
+
+	public Visualiser getVis() {
+		return vis;
+	}
+
+	public void setVis(Visualiser vis) {
+		this.vis = vis;
 	}
 }

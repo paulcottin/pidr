@@ -42,11 +42,11 @@ public class FilesInformations extends JPanel implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (c.getPath1() != null) {
-			file1Path.setText("Fichier 1 : "+c.getPath1());
+			file1Path.setText("Fichier 1 : "+c.getName1());
 		}
 		else file1Path.setText("Fichier 1 : [Vide]");
 		if (c.getPath2() != null) {
-			file2Path.setText("Fichier 2 : "+c.getPath2());
+			file2Path.setText("Fichier 2 : "+c.getName2());
 		}
 		else file2Path.setText("Fichier 2 : [Vide]");
 	}

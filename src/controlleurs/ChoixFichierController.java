@@ -36,22 +36,22 @@ public class ChoixFichierController implements ActionListener{
 		FileFilter imagesFilter = new FileNameExtensionFilter("Rhapsody file", "rpy");
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(imagesFilter);
-		fileChooser.setCurrentDirectory(new File("README.md"));
+		fileChooser.setCurrentDirectory(new File(c.getPath1() != null ? c.getPath1() : "C:\\Program Files\\IBM\\Rational\\Rhapsody\\8.1.1\\Test\\Test.rpy"));
 		if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			File f = fileChooser.getSelectedFile();
 			if (f.getName().contains(".")) {
 				String extension = f.getName().substring(f.getName().indexOf(".")+1);
 				if (extension.equals("rpy")) {
-					Parser2 p = new Parser2(f.getPath());
+					Parser2 p = new Parser2(f.getAbsolutePath());
 					Noeud n = p.parse();
 					c.setInitLigne(p.getInitLigne());
 					if (choixFichier == 1){
 						c.setPremier(new Projet(n));
-						c.setPath1(f.getName());
+						c.setPath1(f.getAbsolutePath());
 					}
 					else if (choixFichier == 2) {
 						c.setDeuxieme(new Projet(n));
-						c.setPath2(f.getName());
+						c.setPath2(f.getAbsolutePath());
 					}
 				}else
 					new BadExtensionException("rpy", extension);

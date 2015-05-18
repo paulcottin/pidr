@@ -1,12 +1,12 @@
 package vues;
 
+import interfaces.LongTask;
+
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
-
-import modele.Comparateur;
 
 /**
  * Barre de progression lors des parsing et comparaison un peu long
@@ -21,12 +21,12 @@ public class ProgressBar extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 
 	private JProgressBar bar;
-	private Comparateur c;
+	private LongTask task;
 	
-	public ProgressBar(Comparateur c) {
+	public ProgressBar(LongTask task) {
 		super("Processing...");
-		this.c = c;
-		this.c.addObserver(this);
+		this.task = task;
+		((Observable) this.task).addObserver(this);
 		this.setSize(300, 50);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
@@ -37,8 +37,7 @@ public class ProgressBar extends JFrame implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("coucou : "+c.isRunning());
-		if (!c.isRunning()) {
+		if (!task.isRunning()) {
 			this.dispose();
 		}
 	}

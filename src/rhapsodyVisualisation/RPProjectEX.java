@@ -13,6 +13,7 @@ public class RPProjectEX extends RPProject {
 		// TODO Auto-generated constructor stub
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void printMyPackages(){
 		Iterator iter = getPackages().toList().iterator();
 		while(iter.hasNext()){
