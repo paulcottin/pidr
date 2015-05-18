@@ -168,7 +168,6 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		for (Diagramme d : this.premier.getDiagrammes()) {
 			for (String s : d.getDiffString()) {
 				diffs += s+"\n";
-				System.out.println(s);
 			}
 		}
 	}

@@ -2,6 +2,8 @@ package rhapsodyVisualisation;
 
 import interfaces.LongTask;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.util.Observable;
 
 import javax.imageio.ImageIO;
 
-import vues.DifferencesPanel;
+import parser.Writer;
 import modele.Comparateur;
 
 import com.telelogic.rhapsody.core.IRPApplication;
@@ -20,7 +22,7 @@ import com.telelogic.rhapsody.core.RhapsodyAppServer;
 
 import donnees.Diagramme;
 
-public class Visualiser extends Observable implements Runnable, LongTask{
+public class Visualiser extends Observable implements Runnable, LongTask, WindowListener{
 
 	private Comparateur c;
 	private String projectPath, projectName;
@@ -56,60 +58,51 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 		}.start();
 	}
 	
-	public void run(){
-//		try {
-//			app = RhapsodyAppServer.createRhapsodyApplication();
-//			System.out.println("app créée");
-//		} catch (RhapsodyRuntimeException e) {
-//			e.printStackTrace();
-//		}
-//		RhapsodyAppServer.setDefultClassFactory(new ClassesFactory());
-		
+	public void run(){		
 		app = RhapsodyAppServer.getActiveRhapsodyApplication();
+		writeProjectWithDiff();
 		project = (IRPProject) app.openProject(projectPath);
 		System.out.println(project.getDisplayName());
 		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();
+		String tmpPath = new File("tmp").getAbsolutePath().replace("\\", "\\\\")+"\\";
 		for (Diagramme diag : c.getPremier().getDiagrammes()) {
+			System.out.println("id : "+diag.getId());
 			diagrammes.add((IRPDiagram) project.findElementByGUID(diag.getId()));
 		}
 		for (int j = 0; j < diagrammes.size(); j++) {
-			diagrammes.get(j).getPictureAs("tmp\\image"+j+".jpg", "JPG", 0, null);
+			System.out.println("diag de j="+j+" : "+diagrammes.get(j).toString());
+			diagrammes.get(j).getPictureAs(tmpPath+"image"+j+".jpg", "JPG", 0, null);
 		}
 		for (int i = 0; i < diagrammes.size(); i++) {
 			try {
-				images.add(ImageIO.read(new File("tmp\\image"+i+".jpg")));
+				images.add(ImageIO.read(new File(tmpPath+"image"+i+".jpg")));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		running = false;
 		update();
-//		diag.getPictureEx("C:\\Users\\paul\\Desktop\\testJPG.jpg", "JPG", 0);
-		
-//		if(app != null)	{
-//			project = (IRPProject) app.openProject("C:\\Program Files\\IBM\\Rational\\Rhapsody\\8.1.1\\Test\\Test.rpy");
-//			System.out.println(project);
-//			System.out.println(project.getDisplayName());
-//			System.out.println("nb components diagrams : "+project.getComponentDiagrams().getCount());
-//			System.out.println("nb components : "+project.getComponents().getCount());
-//			for (int i = 1; i < project.getComponents().getCount()+1; i++) {
-//				System.out.println("component name : "+project.getComponents().getItem(i));
-//			}
-//			IRPDiagram diag = (IRPDiagram) project.getComponentDiagrams().getItem(0);
-//			System.out.println(diag);
-//			IRPCollection diagrammes = diag.getGraphicalElements();
-//			IRPDiagram mainElement = diag.getMainDiagram();
-//			Test d'enregistrement en une image (format EMF)
-//			diag.getPicture("image1");
-//			Test d'enregistrement en une image (format JPG)
-//			diag.getPictureAs("testJPG", "JPG", 0, diagrammes);
-//			RhapsodyAppServer.CloseSession();
-//		}
 	}
 	
 	public void onDispose(){
 		this.imagesConstructs = true;
 		update();
+	}
+	
+	private void writeProjectWithDiff(){
+		String[] pathTab = projectPath.split("\\\\");
+		String nomFichier = pathTab[pathTab.length-1];
+		String[] tab = nomFichier.split("\\.");
+		nomFichier = tab[0]+"_diff"+"."+tab[1];
+		String s = "";
+		for (int i = 0; i < pathTab.length-1; i++) {
+			s += pathTab[i]+"\\";
+		}
+		nomFichier = s+nomFichier;
+		Writer writer = new Writer(c.getPremier().getNoeud(), nomFichier);
+		writer.setInitLigne(c.getInitLigne());
+		writer.write();
+		projectPath = nomFichier;
 	}
 	
 	private void update(){
@@ -155,6 +148,47 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 
 	public void setImages(ArrayList<BufferedImage> images) {
 		this.images = images;
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		RhapsodyAppServer.CloseSession();
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,10 +1,8 @@
 package modele;
 
-import donnees.Projet;
 import parser.Noeud;
 import parser.Parser2;
 import parser.Writer;
-import rhapsodyVisualisation.Visualiser;
 import vues.Fenetre;
 
 /**
@@ -67,6 +65,7 @@ public class Main {
 		 */
 		
 		Comparateur c = new Comparateur();
+		@SuppressWarnings("unused")
 		Fenetre f = new Fenetre(c);
 	}
 

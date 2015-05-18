@@ -3,10 +3,13 @@ package donnees;
 import java.util.ArrayList;
 
 import exceptions.BadDiagramCorrespondance;
-
 import parser.Noeud;
 import rhapsodyClass.IAssociationEnd;
 import rhapsodyClass.IClass;
+import rhapsodyClass.IDependency;
+import rhapsodyClass.IInformationFlow;
+import rhapsodyClass.IPort;
+import rhapsodyClass.ISysMLPort;
 
 /**
  * Plusieurs diagrammes composent un projet. Ils sont caracterises par un type, un nom et un id.
@@ -45,6 +48,18 @@ public class Diagramme {
 					break;
 				case "IAssociationEnd":
 					objets.add(new IAssociationEnd(n));
+					break;
+				case "IPort":
+					objets.add(new IPort(n));
+					break;
+				case "IDependency":
+					objets.add(new IDependency(n));
+					break;
+				case "IInformationFlow":
+					objets.add(new IInformationFlow(n));
+					break;
+				case "ISysMLPort":
+					objets.add(new ISysMLPort(n));
 					break;
 				default:
 					break;

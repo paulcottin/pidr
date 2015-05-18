@@ -31,6 +31,7 @@ public class DifferencesPanel extends JScrollPane implements Observer{
 	private JLabel diffs;
 	private JButton voirDiags;
 	private JPanel container;
+	private Dimension ecartAffichage;
 	
 	public DifferencesPanel(Comparateur c) {
 		super();
@@ -43,15 +44,16 @@ public class DifferencesPanel extends JScrollPane implements Observer{
 	}
 	
 	private void init(){
+		this.ecartAffichage = new Dimension(getWidth(), 20);
 		this.diffs = new JLabel("");
 		this.voirDiags = new JButton("Voir diagrammes");
 		this.voirDiags.addActionListener(new VoirDiagsController(c, this));
 		this.voirDiags.setVisible(false);
-		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
+		container.add(Box.createRigidArea(ecartAffichage));
 		container.add(diffs);
-		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
+		container.add(Box.createRigidArea(ecartAffichage));
 		container.add(voirDiags);
-		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
+		container.add(Box.createRigidArea(ecartAffichage));
 		this.setViewportView(container);
 	}
 
@@ -80,6 +82,7 @@ public class DifferencesPanel extends JScrollPane implements Observer{
 				p = new ImagePanel(c.getVis().getImages().get(i));
 				p.repaint();
 				container.add(p);
+				container.add(Box.createRigidArea(ecartAffichage));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

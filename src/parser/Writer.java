@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Stack;
 
 /**
  * Ecrit dans un fichier le contenu d'un arbre de Noeud.
@@ -50,18 +51,17 @@ public class Writer {
 	
 	private void writeNoeud(Noeud n) throws IOException{
 		if (suiteNoeud) {
+			suiteNoeud = false;
+//			System.out.println("nom : "+n.getName());
 			bw.write(writeDecalage()+"{ "+n.getClasse()+"\n");
 			decalage++;
 		}else {
 			bw.write("{ "+n.getClasse()+"\n");
 			decalage++;
 		}
-//		System.out.println(n.getName()+" ("+n.getClasse()+") : "+n.getChilds());
-//		if (n.getName().equals("Subjects")) bw.write(writeDecalage()+"- "+n.getName()+"\n");
 		if (n.getChilds() != null) {
 			if (n.getChildCount() > 0) {
 				for (Noeud noeud : n.getChilds()) {
-//					System.out.println("write noeud helper de "+noeud.getName());
 					writeNoeudHelper(noeud);
 				}
 			}
@@ -78,6 +78,10 @@ public class Writer {
 		//Si c'est une propriété simple
 		if (!(n.getIntValue() == -8000 && n.getStringValue() == null)) {
 			bw.write(writeDecalage()+"- "+n.getName()+" = "+((n.getIntValue() == -8000) ? n.getStringValue() : n.getIntValue())+";\n");
+			if (n.getName().equals("value") || n.getName().equals("elementList")){
+				suiteNoeud = true;
+//				System.out.println(n.getName()+", suite noeud : "+suiteNoeud);
+			}
 		}
 		//Si c'est un noeud
 		else {
@@ -89,10 +93,6 @@ public class Writer {
 				bw.write(writeDecalage());
 			}
 			for (Noeud no : n.getChilds()) {
-				if (no.getName().equals("value") || no.getName().equals("elementList"))
-					suiteNoeud = true;
-				else
-					suiteNoeud = false;
 				writeNoeud(no);
 			}
 		}

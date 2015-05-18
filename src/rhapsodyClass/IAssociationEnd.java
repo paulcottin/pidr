@@ -75,7 +75,7 @@ public class IAssociationEnd extends DiagrammeObjets{
 	}
 	
 	@Override
-	protected boolean egal(DiagrammeObjets o) {
+	protected boolean egalObjet(DiagrammeObjets o) {
 		modif.clear();
 		if (o instanceof IAssociationEnd) {
 			IAssociationEnd ob = (IAssociationEnd) o;
