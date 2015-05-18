@@ -43,7 +43,7 @@ public class IClass extends DiagrammeObjets {
 
 		if (noeud.getChildByName("_properties") != null) {
 			Noeud typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1);
-			int totalSize = noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("value").getChildByName("Metaclasses").getChildByName("size").getIntValue();
+			int totalSize = noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("size").getIntValue();
 			//Récupération de la couleur du block
 			String colors = "";
 			for (int i = 0; i < totalSize; i++) {

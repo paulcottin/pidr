@@ -27,10 +27,9 @@ public class Projet {
 		lastModifiedDate = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
 		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").getStringValue().split("\"")[1];
 		diagrammes = new ArrayList<Diagramme>();
-		int nbDiagrammes = noeud.getChildByName("Diagrams").getChildByName("size").getIntValue()-1;
-		
+		int nbDiagrammes = noeud.getChildByName("Diagrams").getChildByName("size").getIntValue();
 		for (int i = 0; i < nbDiagrammes; i++) {
-			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChilds().get(1).getChilds().get(1+i)));
+			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChilds().get(1).getChilds().get(i)));
 		}
 	}
 	

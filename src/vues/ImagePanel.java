@@ -9,6 +9,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import modele.Comparateur;
+
 public class ImagePanel extends JPanel{
 
 	/**
@@ -18,8 +20,8 @@ public class ImagePanel extends JPanel{
 	
 	private BufferedImage img;
 	
-	public ImagePanel() throws IOException {
-		this.img = ImageIO.read(new File("C:\\Users\\paul\\Desktop\\image1.jpg"));
+	public ImagePanel(BufferedImage img) throws IOException {
+		this.img = img;
 		this.setPreferredSize(new Dimension(img.getWidth(),img.getHeight()));
 	}
 	

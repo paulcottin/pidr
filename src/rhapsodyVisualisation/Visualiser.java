@@ -5,10 +5,12 @@ import interfaces.LongTask;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import javax.imageio.ImageIO;
 
+import vues.DifferencesPanel;
 import modele.Comparateur;
 
 import com.telelogic.rhapsody.core.IRPApplication;
@@ -16,14 +18,16 @@ import com.telelogic.rhapsody.core.IRPDiagram;
 import com.telelogic.rhapsody.core.IRPProject;
 import com.telelogic.rhapsody.core.RhapsodyAppServer;
 
+import donnees.Diagramme;
+
 public class Visualiser extends Observable implements Runnable, LongTask{
 
 	private Comparateur c;
 	private String projectPath, projectName;
 	private IRPApplication app;
 	private IRPProject project;
-	private boolean running;
-	private BufferedImage img;
+	private boolean running, imagesConstructs;
+	private ArrayList<BufferedImage> images;
 	
 	public Visualiser(){
 		this.c = null;
@@ -40,7 +44,16 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 		this.projectName = null;
 		this.app = null;
 		this.running = false;
-		this.img = null;
+		this.images = new ArrayList<BufferedImage>();
+		this.imagesConstructs = false;
+	}
+	
+	public void initApplication(){
+		new Thread(){
+			public void run(){
+				app = RhapsodyAppServer.createRhapsodyApplication();
+			}
+		}.start();
 	}
 	
 	public void run(){
@@ -51,21 +64,23 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 //			e.printStackTrace();
 //		}
 //		RhapsodyAppServer.setDefultClassFactory(new ClassesFactory());
-//		app = RhapsodyAppServer.createRhapsodyApplication();
+		
 		app = RhapsodyAppServer.getActiveRhapsodyApplication();
 		project = (IRPProject) app.openProject(projectPath);
 		System.out.println(project.getDisplayName());
-		System.out.println("panel widget : "+project.hasPanelWidget());
-		System.out.println(project.findElementByGUID("GUID 158dc38e-b3c0-409f-b6b0-095b6bc1ef84").getDisplayName()); //block1
-		System.out.println(project.findElementByGUID("GUID d935ccec-1611-40a6-bbd1-7056accc5c69").getDisplayName()); //Structure1 ?
-		IRPDiagram diag = (IRPDiagram) project.findElementByGUID("GUID d935ccec-1611-40a6-bbd1-7056accc5c69");
-//		diag.getPicture("C:\\Users\\paul\\Desktop\\image1.emf");
-		diag.getPictureAs("C:\\Users\\paul\\Desktop\\image1.jpg", "JPG", 0, null);
-		try {
-			img = ImageIO.read(new File("C:\\Users\\paul\\Desktop\\ordres.jpg"));
-			System.out.println("img read : ");
-		} catch (IOException e) {
-			e.printStackTrace();
+		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();
+		for (Diagramme diag : c.getPremier().getDiagrammes()) {
+			diagrammes.add((IRPDiagram) project.findElementByGUID(diag.getId()));
+		}
+		for (int j = 0; j < diagrammes.size(); j++) {
+			diagrammes.get(j).getPictureAs("tmp\\image"+j+".jpg", "JPG", 0, null);
+		}
+		for (int i = 0; i < diagrammes.size(); i++) {
+			try {
+				images.add(ImageIO.read(new File("tmp\\image"+i+".jpg")));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		running = false;
 		update();
@@ -90,6 +105,11 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 //			diag.getPictureAs("testJPG", "JPG", 0, diagrammes);
 //			RhapsodyAppServer.CloseSession();
 //		}
+	}
+	
+	public void onDispose(){
+		this.imagesConstructs = true;
+		update();
 	}
 	
 	private void update(){
@@ -121,12 +141,20 @@ public class Visualiser extends Observable implements Runnable, LongTask{
 		this.running = running;
 	}
 
-	public BufferedImage getImg() {
-		return img;
+	public boolean isImagesConstructs() {
+		return imagesConstructs;
 	}
 
-	public void setImg(BufferedImage img) {
-		this.img = img;
+	public void setImagesConstructs(boolean imagesConstructs) {
+		this.imagesConstructs = imagesConstructs;
+	}
+
+	public ArrayList<BufferedImage> getImages() {
+		return images;
+	}
+
+	public void setImages(ArrayList<BufferedImage> images) {
+		this.images = images;
 	}
 
 }

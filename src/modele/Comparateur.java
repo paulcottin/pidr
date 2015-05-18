@@ -60,6 +60,7 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		this.comparaisonDone = false;
 		this.initLigne = "";
 		this.vis = new Visualiser(this);
+		this.vis.initApplication();
 	}
 
 	public void run(){
@@ -175,6 +176,10 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 	public void constructImage(){
 		Thread t = new Thread(vis);
 		t.start();
+	}
+	
+	public void onDispose(){
+		//Ne rien faire
 	}
 
 	private void update(){

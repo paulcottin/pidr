@@ -22,6 +22,7 @@ public class ProgressBar extends JFrame implements Observer{
 
 	private JProgressBar bar;
 	private LongTask task;
+	private boolean firstTime;
 	
 	public ProgressBar(LongTask task) {
 		super("Processing...");
@@ -30,6 +31,7 @@ public class ProgressBar extends JFrame implements Observer{
 		this.setSize(300, 50);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+		this.firstTime = true;
 		bar = new JProgressBar();
 		this.add(bar);
 		bar.setIndeterminate(true);
@@ -38,6 +40,10 @@ public class ProgressBar extends JFrame implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		if (!task.isRunning()) {
+			if (firstTime) {
+				firstTime = false;
+				task.onDispose();
+			}
 			this.dispose();
 		}
 	}

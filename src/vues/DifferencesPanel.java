@@ -1,22 +1,12 @@
 package vues;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.image.ImageObserver;
-import java.io.File;
+import java.awt.Dimension;
 import java.io.IOException;
-import java.text.AttributedCharacterIterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,7 +20,7 @@ import modele.Comparateur;
  * @author paul
  *
  */
-public class DifferencesPanel extends JPanel implements Observer{
+public class DifferencesPanel extends JScrollPane implements Observer{
 
 	/**
 	 * 
@@ -46,7 +36,9 @@ public class DifferencesPanel extends JPanel implements Observer{
 		super();
 		this.c = c;
 		this.c.addObserver(this);
+		this.c.getVis().addObserver(this);
 		this.container = new JPanel();
+		this.container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
 		init();
 	}
 	
@@ -54,42 +46,44 @@ public class DifferencesPanel extends JPanel implements Observer{
 		this.diffs = new JLabel("");
 		this.voirDiags = new JButton("Voir diagrammes");
 		this.voirDiags.addActionListener(new VoirDiagsController(c, this));
+		this.voirDiags.setVisible(false);
+		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
 		container.add(diffs);
+		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
 		container.add(voirDiags);
-//		this.setViewportView(container);
-		this.add(container);
+		container.add(Box.createRigidArea(new Dimension(getWidth(), 20)));
+		this.setViewportView(container);
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		if (c.isComparaisonDone())
+			voirDiags.setVisible(true);
+		
 		if (c.isComparaisonDone() && c.getDiffs().length() == 0)
 			diffs.setText("Il n'y a pas de differences notables");
 		else if (!c.isComparaisonDone()) 
 			diffs.setText("");
 		else 
 			diffs.setText("<html>Differences : <br/>"+c.getDiffs().replaceAll("\n", "<br/>")+"</html>");
+		
+		if (c.getVis().isImagesConstructs()) {
+			constructImage();
+			c.getVis().setImagesConstructs(false);
+		}
 	}
 	
 	public void constructImage(){
-		ImagePanel p;
-		try {
-			p = new ImagePanel();
-			p.repaint();
-			container.add(p);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (int i = 0; i < c.getVis().getImages().size(); i++) {
+			ImagePanel p;
+			try {
+				p = new ImagePanel(c.getVis().getImages().get(i));
+				p.repaint();
+				container.add(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		
-		container.repaint();
-		container.revalidate();
-		System.out.println("components : ");
-		for (Component c : container.getComponents()) {
-			System.out.println(c.toString());
-		}
-//		this.setViewportView(null);
-//		this.setViewportView(container);
 		this.revalidate();
 		this.repaint();
 	}
