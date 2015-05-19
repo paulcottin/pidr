@@ -41,7 +41,7 @@ public class Writer {
 	public void write(){
 		try {
 			bw = new BufferedWriter(new FileWriter(new File(path)));
-			bw.write(initLigne+"\n");
+			bw.write(initLigne+"\r\n");
 			writeNoeud(noeud);
 			bw.close();
 		} catch (IOException e) {
@@ -53,10 +53,10 @@ public class Writer {
 		if (suiteNoeud) {
 			suiteNoeud = false;
 //			System.out.println("nom : "+n.getName());
-			bw.write(writeDecalage()+"{ "+n.getClasse()+"\n");
+			bw.write(writeDecalage()+"{ "+n.getClasse()+" \r\n");
 			decalage++;
 		}else {
-			bw.write("{ "+n.getClasse()+"\n");
+			bw.write("{ "+n.getClasse()+" \r\n");
 			decalage++;
 		}
 		if (n.getChilds() != null) {
@@ -67,7 +67,7 @@ public class Writer {
 			}
 		}
 		decalage--;
-		bw.write(writeDecalage()+"}\n");
+		bw.write(writeDecalage()+"}\r\n");
 	}
 	
 	private void writeNoeudHelper(Noeud n) throws IOException{
@@ -77,7 +77,7 @@ public class Writer {
 		}
 		//Si c'est une propriété simple
 		if (!(n.getIntValue() == -8000 && n.getStringValue() == null)) {
-			bw.write(writeDecalage()+"- "+n.getName()+" = "+((n.getIntValue() == -8000) ? n.getStringValue() : n.getIntValue())+";\n");
+			bw.write(writeDecalage()+"- "+n.getName()+" = "+((n.getIntValue() == -8000) ? n.getStringValue() : n.getIntValue())+";\r\n");
 			if (n.getName().equals("value") || n.getName().equals("elementList")){
 				suiteNoeud = true;
 //				System.out.println(n.getName()+", suite noeud : "+suiteNoeud);
@@ -89,7 +89,7 @@ public class Writer {
 			bw.write(writeDecalage()+""+((!n.getName().equals("") ? "- " : ""))+n.getName()+""+((!n.getName().equals("") ? " = " : "")));
 			
 			if (n.getName().equals("value")) {
-				bw.write("\n");
+				bw.write("\r\n");
 				bw.write(writeDecalage());
 			}
 			for (Noeud no : n.getChilds()) {

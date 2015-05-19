@@ -21,6 +21,16 @@ public class Handle {
 	public boolean equals(Object object){
 		if (object instanceof Handle) {
 			Handle o = (Handle) object;
+			if (!id.equals(o.getId())) return false;
+			else return true;
+		}
+		else
+			return false;
+	}
+	
+	public boolean egal(Object object){
+		if (object instanceof Handle) {
+			Handle o = (Handle) object;
 			if (!classe.equals(o.getClasse()) || !nom.equals(o.getNom())) return false;
 			else return true;
 		}

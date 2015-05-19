@@ -128,31 +128,56 @@ public class IClass extends DiagrammeObjets {
 				name.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
 				b = false;
 			}
-//			if (attributs.size() != o.getAttributs().size() || operations.size() != o.getOperations().size()) return false;
+			//Si il n'y a pas le mm nombre d'attribut c'est qu'il y en a qui ont été créés ou supprimés
+			if (attributs.size() != o.getAttributs().size()) {
+				//Si il y en a plus dans la version de depart
+				if (attributs.size() > o.getAttributs().size()) {
+					//On sauvegarde ceux qui sont en commun
+					ArrayList<Handle> commun = new ArrayList<Handle>();
+					for (int i = 0; i < attributs.size(); i++) 
+						if (o.getAttributs().contains(attributs.get(i))) 
+							commun.add(attributs.get(i));
+					//Les attributs qu'il y a dans la version de depart et pas celle d'arrivee
+					for (int i = 0; i < attributs.size(); i++) 
+						if (!commun.contains(attributs.get(i))) modif.add("Block \""+name+"\" - attribut \""+attributs.get(i).getNom()+"\" supprimé");
+					//Les attributs qui sont dans la version d'arrivée et pas dans celle de départ
+					for (int i = 0; i < o.getAttributs().size(); i++) {
+						if (!commun.contains(o.getAttributs().get(i))) modif.add("Block \""+name+"\" - attribut \""+o.getAttributs().get(i).getNom()+"\" ajouté");
+					}
+				}
+				//Si il y en a plus dans la version modifiée
+				else {
+					
+				}
+				b = false;
+			}
 			boolean test = false;
 			for (Handle t : attributs) {
 				test = false;
 				for (Handle t1 : o.getAttributs()) {
-					if (t.equals(t1)) {
-						test = false;
+					if (t.egal(t1)) {
+						test = true;
 					}
 				}
 				if (!test) {
-					modif.add("attributs : "+o.getAttributs().toString());
-					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					modif.add("attributs : "+t.toString());
+//					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					setEtat(MODIF);
 					b = false; 
 				}
 			}
 			for (Handle t : operations) {
 				test = false;
 				for (Handle t1 : o.getOperations()) {
-					if (t.equals(t1)) {
-						test = false;
+					if (t.egal(t1)) {
+						test = true;
 					}
 				}
 				if (!test) {
-					modif.add("operations : "+o.getOperations().toString());
-					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					System.out.println("ope modif");
+					modif.add("operations : "+t.toString());
+//					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
+					setEtat(MODIF);
 					b = false; 
 				}
 			}

@@ -104,7 +104,12 @@ public class Parser2 {
 				//Une propriété "finale"/simple
 				if (ligne.contains(";") && !nom.equals("elementList")) {
 					int beginValue = endNom + 2;
-					int endValue = ligne.indexOf(";");
+					int endValue;
+					//Cas particulier de plusieurs valeurs dans un attribut value
+					if (nom.equals("value")){
+						endValue = ligne.lastIndexOf(";");
+					}else
+						endValue = ligne.indexOf(";");
 					stringValue = ligne.substring(beginValue+1, endValue);
 					if (stringValue.matches("\\s*-?\\d+\\s*")) {
 						intValue = Integer.parseInt(stringValue.replaceAll("\\s", ""));
@@ -116,6 +121,7 @@ public class Parser2 {
 							n.getChilds().add(new Noeud(nom, -8000, stringValue, null));
 					}
 				}
+				//Cas particulier d'elementList
 				else if (nom.equals("elementList")) {
 					intValue = Integer.valueOf(ligne.substring(endNom+3, ligne.indexOf(";")));
 					sizePile.push(intValue);
@@ -132,6 +138,7 @@ public class Parser2 {
 					}
 					n.getChilds().add(new Noeud("", -8000, null, noeuds));
 				}
+				//Cas particulier de frameset
 				else if (nom.equals("frameset")) {
 					int beginValue = endNom + 2;
 					int endValue = ligne.length();

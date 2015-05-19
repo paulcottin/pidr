@@ -7,6 +7,10 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -25,7 +29,7 @@ import donnees.Diagramme;
 public class Visualiser extends Observable implements Runnable, LongTask, WindowListener{
 
 	private Comparateur c;
-	private String projectPath, projectName;
+	private String projectPath, projectName, realProjectPath;
 	private IRPApplication app;
 	private IRPProject project;
 	private boolean running, imagesConstructs;
@@ -66,11 +70,9 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();
 		String tmpPath = new File("tmp").getAbsolutePath().replace("\\", "\\\\")+"\\";
 		for (Diagramme diag : c.getPremier().getDiagrammes()) {
-			System.out.println("id : "+diag.getId());
 			diagrammes.add((IRPDiagram) project.findElementByGUID(diag.getId()));
 		}
 		for (int j = 0; j < diagrammes.size(); j++) {
-			System.out.println("diag de j="+j+" : "+diagrammes.get(j).toString());
 			diagrammes.get(j).getPictureAs(tmpPath+"image"+j+".jpg", "JPG", 0, null);
 		}
 		for (int i = 0; i < diagrammes.size(); i++) {
@@ -80,6 +82,7 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 				e.printStackTrace();
 			}
 		}
+		replaceFiles();
 		running = false;
 		update();
 	}
@@ -89,20 +92,48 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		update();
 	}
 	
+	/**
+	 * But de la fonction : remplacer le fichier .rpy initial par celui généré par le programme
+	 * 						pour que s'affiche en couleur les modifications lorsque l'on appelera 
+	 * 						la fonction openProject();
+	 * Pour cela : 
+	 * 1. on deplace le fichier de projet.rpy dans le repertoire tmp/
+	 * 2. on ecrit le fichier généré par nous dans le repertoire du projet initial
+	 * 3. on génère les graphs avec la fonction habituelle
+	 * 4. on supprime le fichier généré par nous
+	 * 5. on redéplace le fichier.rpy de tmp/ dans son répertoire
+	 * 
+	 */
 	private void writeProjectWithDiff(){
+		//1. sauvegarde de l'ancien path
+		realProjectPath = projectPath;
+		//1. on deplace le fichier dans tmp/
 		String[] pathTab = projectPath.split("\\\\");
 		String nomFichier = pathTab[pathTab.length-1];
-		String[] tab = nomFichier.split("\\.");
-		nomFichier = tab[0]+"_diff"+"."+tab[1];
-		String s = "";
-		for (int i = 0; i < pathTab.length-1; i++) {
-			s += pathTab[i]+"\\";
+		Path pathProject = FileSystems.getDefault().getPath(realProjectPath);
+		Path pathTmp = FileSystems.getDefault().getPath("tmp", nomFichier);
+		try {
+			Files.move(pathProject, pathTmp, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		nomFichier = s+nomFichier;
-		Writer writer = new Writer(c.getPremier().getNoeud(), nomFichier);
+		Writer writer = new Writer(c.getPremier().getNoeud(), realProjectPath);
 		writer.setInitLigne(c.getInitLigne());
 		writer.write();
-		projectPath = nomFichier;
+		projectPath = realProjectPath;
+	}
+	
+	private void replaceFiles(){
+		(new File(realProjectPath)).delete();
+		String[] pathTab = projectPath.split("\\\\");
+		String nomFichier = pathTab[pathTab.length-1];
+		Path pathProject = FileSystems.getDefault().getPath(realProjectPath);
+		Path pathTmp = FileSystems.getDefault().getPath("tmp", nomFichier);
+		try {
+			Files.move(pathTmp, pathProject, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void update(){
@@ -189,6 +220,14 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getRealProjectPath() {
+		return realProjectPath;
+	}
+
+	public void setRealProjectPath(String realProjectPath) {
+		this.realProjectPath = realProjectPath;
 	}
 
 }
