@@ -10,15 +10,13 @@ import modele.Comparateur;
 public class VoirDiagsController implements ActionListener{
 
 	Comparateur c;
-	DifferencesPanel panel;
 	
 	public VoirDiagsController(Comparateur c, DifferencesPanel panel) {
 		this.c = c;
-		this.panel = panel;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		c.getVis().setProjectPath(c.getPath1());
+		c.getVis().setProjectPath(c.getPath2());
 		Thread t = new Thread(c.getVis());
 		c.getVis().setRunning(true);
 		t.start();

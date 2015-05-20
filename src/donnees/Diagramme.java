@@ -8,6 +8,8 @@ import rhapsodyClass.IAssociationEnd;
 import rhapsodyClass.IClass;
 import rhapsodyClass.IDependency;
 import rhapsodyClass.IInformationFlow;
+import rhapsodyClass.IObjectLink;
+import rhapsodyClass.IPart;
 import rhapsodyClass.IPort;
 import rhapsodyClass.ISysMLPort;
 
@@ -61,6 +63,12 @@ public class Diagramme {
 				case "ISysMLPort":
 					objets.add(new ISysMLPort(n));
 					break;
+				case "IPart":
+					objets.add(new IPart(n));
+					break;
+				case "IObjectLink":
+					objets.add(new IObjectLink(n));
+					break;
 				default:
 					break;
 				}
@@ -99,18 +107,18 @@ public class Diagramme {
 			if (!list1.get(i).egal(list2.get(correspondance[i]))){
 				diff.add(list1.get(i));
 				diffString.addAll(list1.get(i).getModif());
-				list1.get(i).setEtat(DiagrammeObjets.MODIF);
+				list2.get(correspondance[i]).setEtat(DiagrammeObjets.MODIF);
 			}
 		}
-		//Si la list1 est la liste de départ et plus longue alors on met les restants dans un état supprimé
+		//Si la list1, la liste de départ, est plus longue alors on met les restants dans un état supprimé
 		if (list1.size() > list2.size() && this.getObjets().equals(list1)) {
 			for (int i = list2.size(); i < list1.size(); i++)
-				list1.get(i).setEtat(DiagrammeObjets.SUPPR);
+				list2.get(correspondance[i]).setEtat(DiagrammeObjets.SUPPR);
 		}
 		//Si la list1 est la liste de départ et plus courte alors on met les restants dans un état ajouté
 		else if (list1.size() > list2.size() && d.getObjets().equals(list1)) {
 			for (int i = list2.size(); i < list1.size(); i++)
-				list1.get(i).setEtat(DiagrammeObjets.ADD);
+				list2.get(correspondance[i]).setEtat(DiagrammeObjets.ADD);
 		}
 		else if (list1.size() == list2.size()){}
 		//Ne rien faire

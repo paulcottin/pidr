@@ -69,7 +69,7 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		System.out.println(project.getDisplayName());
 		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();
 		String tmpPath = new File("tmp").getAbsolutePath().replace("\\", "\\\\")+"\\";
-		for (Diagramme diag : c.getPremier().getDiagrammes()) {
+		for (Diagramme diag : c.getDeuxieme().getDiagrammes()) {
 			diagrammes.add((IRPDiagram) project.findElementByGUID(diag.getId()));
 		}
 		for (int j = 0; j < diagrammes.size(); j++) {
@@ -117,9 +117,12 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Writer writer = new Writer(c.getPremier().getNoeud(), realProjectPath);
+		Writer writer = new Writer(c.getDeuxieme().getNoeud(), realProjectPath);
 		writer.setInitLigne(c.getInitLigne());
 		writer.write();
+		Writer writer2 = new Writer(c.getDeuxieme().getNoeud(), "retour.rpy");
+		writer2.setInitLigne(c.getInitLigne());
+		writer2.write();
 		projectPath = realProjectPath;
 	}
 	

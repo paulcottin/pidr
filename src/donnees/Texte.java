@@ -10,6 +10,7 @@ public class Texte {
 	private Noeud noeud;
 	private String text;
 	private int r, g, b;
+	private int etat;
 	
 	public Texte(Noeud n) {
 		this.noeud = n;
@@ -25,9 +26,9 @@ public class Texte {
 	
 	public void write(){
 		noeud.getChildByName("m_str").setStringValue("\""+text+"\"");
-//		if (r != -1) {
-//			String color = "\""+r+","+g+","+b+"\"";
-//		}
+		if (r != -1) {
+			String color = "\""+r+","+g+","+b+"\"";
+		}
 	}
 	
 	public boolean equals(Object o){
@@ -84,6 +85,14 @@ public class Texte {
 		this.r = r;
 		this.g = g;
 		this.b = b;
+	}
+
+	public int getEtat() {
+		return etat;
+	}
+
+	public void setEtat(int etat) {
+		this.etat = etat;
 	}
 
 }

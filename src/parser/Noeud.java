@@ -43,7 +43,7 @@ public class Noeud {
 		childs = new ArrayList<Noeud>();
 		classe = "";
 		name = "";
-		stringValue = "";
+		stringValue = null;
 		intValue = -8000;
 	}
 	
@@ -74,6 +74,7 @@ public class Noeud {
 	public String toString(){
 		String res = "";
 		res += name;
+		res += "_{"+intValue+", "+stringValue+"}";
 		res += " ("+((childs == null) ? 0 : childs.size())+")";
 		res += " [";
 		if (childs != null) {
