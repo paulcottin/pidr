@@ -26,7 +26,7 @@ public class IDependency extends Liaison{
 
 	@Override
 	protected String getColorType(){
-		return lineName.getText();
+		return lineName.getText().equals("") ? "Depends" : lineName.getText();
 	}
 	
 }

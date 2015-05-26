@@ -38,11 +38,11 @@ public class EnregistrerController implements ActionListener{
 			Writer writer = new Writer();
 			writer.setInitLigne(c.getInitLigne());
 			if (c.getDiffs().length() == 0) {
-				writer.setNoeud(c.getPremier().getNoeud());
+				writer.setNoeud(c.getPremier().getProjet().getNoeud());
 				writer.setPath(path);
 			}
 			else {
-				writer.setNoeud(c.getDeuxieme().getNoeud());
+				writer.setNoeud(c.getDeuxieme().getProjet().getNoeud());
 				writer.setPath(path);
 			}
 			writer.write();

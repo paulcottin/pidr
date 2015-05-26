@@ -29,7 +29,7 @@ public abstract class DiagrammeObjets {
 	protected Texte name;
 	protected int r, g, b;
 	protected int etat;
-	protected ArrayList<String> modif;//, suppr, add;
+	protected ArrayList<String> modif;
 	
 	public DiagrammeObjets(Noeud n){
 		this.noeud = n;
@@ -191,11 +191,7 @@ public abstract class DiagrammeObjets {
 			//Si _properties est null
 			else {
 				//Créer _properties
-//				System.out.println("creation prop : "+noeud.toString());
-//				noeud.getChilds().add(1, constructProperties());
-//				System.out.println("noeud : "+noeud.toString());
-//				System.out.println(noeud.getChilds().get(1).toString());
-//				System.out.println(noeud.getChild(1).getChild(0).toString());
+				noeud.getChilds().add(1, constructProperties());
 			}
 		}
 	}
@@ -209,7 +205,7 @@ public abstract class DiagrammeObjets {
 		Parser2 p = new Parser2("tmp\\properties.rpy");
 		Noeud n = p.parse();
 		n.setName("_properties");
-		System.out.println("prop class : "+n.getClasse());
+		n.setChilds(n.getChild(0).getChilds());
 		return n;
 	}
 	

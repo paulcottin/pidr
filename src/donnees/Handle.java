@@ -13,9 +13,19 @@ public class Handle {
 	}
 	
 	private void init(){
-		classe = noeud.getChildByName("_class").getStringValue().split("\"")[1];
-		nom = noeud.getChildByName("_name").getStringValue().split("\"")[1];
 		id = noeud.getChildByName("_id").getStringValue();
+		System.out.println("id : "+id);
+		if (noeud.getChildByName("_class") != null)
+			classe = noeud.getChildByName("_class").getStringValue().length() > 2 ? noeud.getChildByName("_class").getStringValue().split("\"")[1] : "";
+		else if (noeud.getChildByName("_m2Class") != null)
+			classe = noeud.getChildByName("_m2Class").getStringValue().length() > 2 ? noeud.getChildByName("_m2Class").getStringValue().split("\"")[1] : "";
+		else
+			classe = null;
+		
+		if (noeud.getChildByName("_name") != null)
+			nom = noeud.getChildByName("_name").getStringValue().length() > 2 ? noeud.getChildByName("_name").getStringValue().split("\"")[1] : "";
+		else
+			nom = null;
 	}
 	
 	public boolean equals(Object object){

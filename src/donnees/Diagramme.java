@@ -126,12 +126,10 @@ public class Diagramme {
 			for (int j = 0; j < objets.size(); j++) {
 				if (d.getObjets().get(i).getId().equals(this.objets.get(j).getId())) {
 					find = true;
-					System.out.println("egal : "+d.getObjets().get(i).getNameText()+" - "+objets.get(j).getNameText());
 				}
 			}
 			if (!find) {
 				d.getObjets().get(i).setEtat(DiagrammeObjets.ADD);
-				System.out.println("ajout : "+d.getObjets().get(i).getNameText());
 				diffString.add("Ajout : "+d.getObjets().get(i).getNameText()+" ("+d.getObjets().get(i).getClasse()+")");
 			}
 		}
