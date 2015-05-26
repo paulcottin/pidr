@@ -62,9 +62,12 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		}.start();
 	}
 	
-	public void run(){		
+	public void run(){	
+		System.out.println("visualiser - Run");
 		app = RhapsodyAppServer.getActiveRhapsodyApplication();
+		System.out.println("app ok");
 		writeProjectWithDiff();
+		System.out.println("project path : "+projectPath);
 		project = (IRPProject) app.openProject(projectPath);
 		System.out.println(project.getDisplayName());
 		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();

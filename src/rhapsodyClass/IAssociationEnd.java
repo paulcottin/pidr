@@ -89,6 +89,11 @@ public class IAssociationEnd extends DiagrammeObjets{
 		else 
 			return false;
 	}
+	
+	@Override
+	protected String getColorType(){
+		return "ERREUR";
+	}
 
 	public String getDebut() {
 		return debut;

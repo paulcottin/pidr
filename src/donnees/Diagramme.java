@@ -2,6 +2,7 @@ package donnees;
 
 import java.util.ArrayList;
 
+import modele.Comparateur;
 import exceptions.BadDiagramCorrespondance;
 import parser.Noeud;
 import rhapsodyClass.IAssociationEnd;
@@ -82,48 +83,12 @@ public class Diagramme {
 	 * @param d Diagramme à comparer
 	 */
 	public void compareTo(Diagramme d){
-		int maxDiagrammeSize = this.getObjets().size() >= d.getObjets().size() ? this.getObjets().size() : d.getObjets().size();
-		initCorrespondance(maxDiagrammeSize);
-		ArrayList<DiagrammeObjets> list1 = (maxDiagrammeSize == this.getObjets().size() ? this.getObjets() : d.getObjets());
-		ArrayList<DiagrammeObjets> list2 = (maxDiagrammeSize != this.getObjets().size() ? this.getObjets() : d.getObjets());
-		//list1 est donc la liste la plus longue
+		correspondance = new int[objets.size()];
+		for (int i = 0; i < correspondance.length; i++)
+			correspondance[i] = -1;
 
-		doCorrespondance(list1, list2);
-
-		compare(list1, list2, d);
-
-	}
-
-	/**
-	 * Lance la comparaison en appellant la méthode egal du type DiagrammeObjet
-	 * @param list1 liste à comparer
-	 * @param list2 avec elle
-	 */
-	private void compare(ArrayList<DiagrammeObjets> list1, ArrayList<DiagrammeObjets> list2, Diagramme d){
-		diffString.clear();
-		ArrayList<DiagrammeObjets> diff = new ArrayList<DiagrammeObjets>();
-		//on compare les diagrammes en commun
-		for (int i = 0; i < list2.size(); i++) {
-			if (!list1.get(i).egal(list2.get(correspondance[i]))){
-				diff.add(list1.get(i));
-				diffString.addAll(list1.get(i).getModif());
-				list2.get(correspondance[i]).setEtat(DiagrammeObjets.MODIF);
-			}
-		}
-		//Si la list1, la liste de départ, est plus longue alors on met les restants dans un état supprimé
-		if (list1.size() > list2.size() && this.getObjets().equals(list1)) {
-			for (int i = list2.size(); i < list1.size(); i++)
-				list2.get(correspondance[i]).setEtat(DiagrammeObjets.SUPPR);
-		}
-		//Si la list1 est la liste de départ et plus courte alors on met les restants dans un état ajouté
-		else if (list1.size() > list2.size() && d.getObjets().equals(list1)) {
-			for (int i = list2.size(); i < list1.size(); i++)
-				list2.get(correspondance[i]).setEtat(DiagrammeObjets.ADD);
-		}
-		else if (list1.size() == list2.size()){}
-		//Ne rien faire
-		else
-			System.out.println("ERROR (Diagramme - compare())");
+		doCorrespondance(d);
+		compare(d);
 	}
 
 	/**
@@ -134,54 +99,61 @@ public class Diagramme {
 	 * @param list1 : la 1ère liste de diagrammes
 	 * @param list2 : la 2ème liste de diagrammes
 	 */
-	private void doCorrespondance(ArrayList<DiagrammeObjets> list1, ArrayList<DiagrammeObjets> list2){
-		boolean find = true;
-		//Avec les id 
-		for (int i = 0; i < list1.size(); i++) {
-			for (int j = 0; j < list2.size(); j++) {
-				if (list1.get(i).getId().equals(list2.get(j).getId())) correspondance[i] = j;
+
+	private void doCorrespondance(Diagramme d){
+		diffString.clear();
+		//On parcourt this, les objets qui sont dans les deux se mettent en correspondance
+		//Ceux qui ne sont pas dans d se mettent en etat SUPPR
+		boolean find = false;
+		for (int i = 0; i < objets.size(); i++) {
+			find = false;
+			for (int j = 0; j < d.getObjets().size(); j++) {
+				if (objets.get(i).getId().equals(d.getObjets().get(j).getId())) {
+					correspondance[i] = j;
+					find = true;
+				}
 			}
-		}		
-
-		find = correspondanceOK(list1, list2);
-		if (!find)
-			new BadDiagramCorrespondance();
-		else
-			System.out.println("correspondance objets ok !");
-	}
-
-	/**
-	 * Check si la correspondance est finie ou pas
-	 * @param list1 les deux listes 
-	 * @param list2 à comparer
-	 * @return
-	 */
-	private boolean correspondanceOK(ArrayList<DiagrammeObjets> list1, ArrayList<DiagrammeObjets> list2){
-		boolean find = true;
-		int cpt = 0;
-		for (Integer i : correspondance) {
-			if (list1.size() == list2.size())
-				if (i == -1) find = false; else;
-			else 
-				if (i == -1) cpt++;			
+			if (!find) {
+				objets.get(i).setEtat(DiagrammeObjets.SUPPR);
+				d.getObjets().add(objets.get(i));
+				diffString.add("Suppression : "+objets.get(i).getNameText()+" ("+objets.get(i).getClasse()+")");
+			}
 		}
-		if (list1.size() < list2.size()) 
-			if (list1.size() != cpt) find = false; else find = true;
-		else if (list2.size() < list1.size())
-			if (list2.size() != cpt) find = false; else find = true;
-		return find;
+		//On parcourt d, ceux qui ne sont pas dans this se mettent en etat ADD
+		find = false;
+		for (int i = 0; i < d.getObjets().size(); i++) {
+			find = false;
+			for (int j = 0; j < objets.size(); j++) {
+				if (d.getObjets().get(i).getId().equals(this.objets.get(j).getId())) {
+					find = true;
+					System.out.println("egal : "+d.getObjets().get(i).getNameText()+" - "+objets.get(j).getNameText());
+				}
+			}
+			if (!find) {
+				d.getObjets().get(i).setEtat(DiagrammeObjets.ADD);
+				System.out.println("ajout : "+d.getObjets().get(i).getNameText());
+				diffString.add("Ajout : "+d.getObjets().get(i).getNameText()+" ("+d.getObjets().get(i).getClasse()+")");
+			}
+		}
 	}
 
 	/**
-	 * Initialisation du tableau de correspondance
-	 * @param size : taille du tableau
+	 * Lance la comparaison en appellant la méthode egal du type DiagrammeObjet
+	 * @param list1 liste à comparer
+	 * @param list2 avec elle
 	 */
-	private void initCorrespondance(int size){
-		correspondance = new int[size];
-		for (int i = 0; i < correspondance.length; i++)
-			correspondance[i] = -1;
+	private void compare(Diagramme d){
+		//on compare les diagrammes en commun
+		for (int i = 0; i < objets.size(); i++) {
+			if (correspondance[i] != -1) {
+				if (!objets.get(i).egal(d.getObjets().get(correspondance[i]))) {
+					diffString.addAll(objets.get(i).getModif());
+					d.getObjets().get(correspondance[i]).setEtat(DiagrammeObjets.MODIF);
+				}
+			}
+		}
 	}
-	
+
 	/**
 	 * Ecris dans le Noeud les données de la classe (pour l'écriture ensuite dans le fichier via le Writer)
 	 */

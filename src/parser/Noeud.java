@@ -98,6 +98,10 @@ public class Noeud {
 		return null;
 	}
 	
+	public Noeud getChild(int i){
+		return childs.get(i);
+	}
+	
 	public int getChildCount(){
 		return childs.size();
 	}

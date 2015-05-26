@@ -128,6 +128,8 @@ public abstract class DiagrammeObjets {
 		return name.getText()+" ("+classe+") etat : "+etat;
 	}
 	
+	protected abstract String getColorType();
+	
 	/**
 	 * Défini si le composant a été modifié ou pas et le colore en conséquence
 	 * @param etat : peut être égal à IDEM, MODIF, ADD, SUPPR
@@ -146,15 +148,12 @@ public abstract class DiagrammeObjets {
 		int findLineColor = -1,findMetaclass = -1, findFormat = -1, findFontColor = -1;
 		int nbPropSubject = 0, nbPropMetaClass = 0, nbProperties = 0;
 		if (indicatifModification != IDEM) {
-			System.out.println("etat : "+indicatifModification);
 			//si il existe un fils "_propriete"
 			if (noeud.getChildByName("_properties") != null) {
-				System.out.println("properties not null");
 				//Si il existe un attribut "format" : la où sont défini les couleurs
 				nbPropSubject = noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("size").getIntValue();
 				for (int i = 0; i < nbPropSubject; i++) {
-					if (noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1).getChilds().get(i).getChildByName("_Name").equals("\"Format\"")) {
-						System.out.println("format existe");
+					if (noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1).getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
 						findFormat = i;
 						Noeud format = noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1).getChilds().get(i);
 						nbPropMetaClass = format.getChildByName("Metaclasses").getChildByName("size").getIntValue();
@@ -166,7 +165,6 @@ public abstract class DiagrammeObjets {
 										prop.getChilds().get(1).getChilds().get(j2).getChildByName("_Name").getStringValue().equals("\"Font.FontColor\"")) {
 									findFontColor = j2;
 									findMetaclass = j;
-									System.out.println("color : "+noeud.getChildByName("_id").getStringValue());
 									prop.getChilds().get(1).getChilds().get(j2).getChildByName("_Value").setStringValue(constructRGB(r, g, b));
 								}
 								else if (prop.getChilds().get(1).getChilds().get(j2).getChildByName("_Type").getStringValue().equals("Color") && 
@@ -179,7 +177,6 @@ public abstract class DiagrammeObjets {
 						}
 					}
 				}
-				System.out.println("format existe pas");
 				//Si il a trouvé "Format" mais qu'il n'y a pas Color
 				if (findFormat > 0 && findFontColor < 0) {
 					//Ajouter Property dans Properties
@@ -187,7 +184,6 @@ public abstract class DiagrammeObjets {
 				}
 				//Si il n'a pas trouvé "Format"
 				else if (findFormat < 0) {
-					System.out.println("créer format");
 					//créer Format
 					noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(1).getChilds().add(0, constructFormat(nbPropSubject));
 				}
@@ -195,19 +191,25 @@ public abstract class DiagrammeObjets {
 			//Si _properties est null
 			else {
 				//Créer _properties
-				noeud.getChilds().add(1, constructProperties());
+//				System.out.println("creation prop : "+noeud.toString());
+//				noeud.getChilds().add(1, constructProperties());
+//				System.out.println("noeud : "+noeud.toString());
+//				System.out.println(noeud.getChilds().get(1).toString());
+//				System.out.println(noeud.getChild(1).getChild(0).toString());
 			}
 		}
 	}
 	
 	private Noeud constructProperties(){
 		try {
-			writeHelpFile("tmp\\properties.rpy", "properties");
+			writeHelpFile("tmp\\properties.rpy", "properties", getColorType());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		Parser2 p = new Parser2("tmp\\properties.rpy");
 		Noeud n = p.parse();
+		n.setName("_properties");
+		System.out.println("prop class : "+n.getClasse());
 		return n;
 	}
 	
@@ -221,12 +223,13 @@ public abstract class DiagrammeObjets {
 		noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("size").setIntValue(noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("size").getIntValue()+1);
 		//On construit le noeud
 		try {
-			writeHelpFile("tmp\\format.rpy", "format");
+			writeHelpFile("tmp\\format.rpy", "format", getColorType());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		Parser2 p = new Parser2("tmp\\format.rpy");
 		Noeud n = p.parse();
+		n.setName("");
 		return n;
 	}
 	
@@ -236,35 +239,36 @@ public abstract class DiagrammeObjets {
 		noeud.getChildByName("_properties").getChildByName("Subjects").getChilds().get(findFormat).getChildByName("Metaclasses").getChilds().get(findMetaclass).getChildByName("Properties").getChildByName("size").setIntValue(size+1);
 		//On crée la property pour la couleur
 		try {
-			writeHelpFile("tmp\\aProperty.rpy", "aProperty");
+			writeHelpFile("tmp\\aProperty.rpy", "aProperty", getColorType());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		Parser2 p = new Parser2("tmp\\aProperty.rpy");
 		Noeud n = p.parse();
+		n.setName("");
 		return n;
 	}
 	
-	private void writeHelpFile(String path, String type) throws IOException{
+	private void writeHelpFile(String path, String type, String colorObject) throws IOException{
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)));
 		String s = "";
 		
 		if (type.equals("format")) {
-			s += "{ IPropertySubject \n\t- _Name =3 \"Format\";\n- Metaclasses = { IRPYRawContainer \n\t- size = 1;\n- value = \n{ IPropertyMetaclass "+
-						"\n\t- _Name = \"Object\";\n- Properties = { IRPYRawContainer\n\t- size = 1;\n- value =\n { IProperty\n\t- _Name = \"Line.LineColor\";"+
-								"\n\t- _Value = "+constructRGB(r, g, b)+";\n- _Type = Color;\n}\n}\n}\n}\n}\n";
+			s += "\r\n{ IPropertySubject \r\n\t- _Name = \"Format\";\r\n- Metaclasses = { IRPYRawContainer \r\n\t- size = 1;\r\n- value = \r\n{ IPropertyMetaclass "+
+						"\r\n\t- _Name = \""+colorObject+"\";\r\n- Properties = { IRPYRawContainer \r\n\t- size = 1;\r\n- value = \r\n { IProperty \r\n\t- _Name = \"Line.LineColor\";"+
+								"\r\n\t- _Value = "+constructRGB(r, g, b)+";\r\n- _Type = Color;\r\n}\r\n}\r\n}\r\n}\r\n}\r\n";
 			bw.write(s);
 		}
 		else if (type.equals("aProperty")) {
-			s += "{ IProperty\n\t- _Name = \"Line.LineColor\";"+
-					"\n\t- _Value = "+constructRGB(r, g, b)+";\n- _Type = Color;\n}\n";
+			s += "\r\n{ IProperty \r\n\t- _Name = \"Line.LineColor\";"+
+					"\r\n\t- _Value = "+constructRGB(r, g, b)+";\r\n- _Type = Color;\r\n}\r\n";
 			bw.write(s);
 		}
 		else if (type.equals("properties")) {
-			s += "- _properties = { IPropertyContainer \n\t- Subjects = { IRPYRawContainer\n\t - size = 1;\n"
-					+ "- value = { IPropertySubject \n\t- _Name =3 \"Format\";\n- Metaclasses = { IRPYRawContainer \n\t- size = 1;\n- value = \n{ IPropertyMetaclass "+
-					"\n\t- _Name = \"Object\";\n- Properties = { IRPYRawContainer\n\t- size = 1;\n- value =\n { IProperty\n\t- _Name = \"Line.LineColor\";"+
-							"\n\t- _Value = "+constructRGB(r, g, b)+";\n- _Type = Color;\n}\n}\n}\n}\n}\n}\n}\n";
+			s += "\r\n{ IPropertyContainer \r\n\t- Subjects = { IRPYRawContainer \r\n\t - size = 1;\r\n"
+					+ "- value = \r\n{ IPropertySubject \r\n\t- _Name = \"Format\";\r\n- Metaclasses = { IRPYRawContainer \r\n\t- size = 1;\r\n- value = \r\n{ IPropertyMetaclass "+
+					"\r\n\t- _Name = \""+colorObject+"\";\r\n- Properties = { IRPYRawContainer \r\n\t- size = 1;\r\n- value = \r\n { IProperty \r\n\t- _Name = \"Line.LineColor\";"+
+							"\r\n\t- _Value = "+constructRGB(r, g, b)+";\r\n- _Type = Color;\r\n}\r\n}\r\n}\r\n}\r\n}\r\n}\r\n}\r\n";
 			bw.write(s);
 		}
 		bw.close();

@@ -25,4 +25,9 @@ public class IPort extends DiagrammeObjets{
 	protected void write() {
 		
 	}
+	
+	@Override
+	protected String getColorType(){
+		return "Object";
+	}
 }

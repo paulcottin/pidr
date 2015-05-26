@@ -48,6 +48,11 @@ public class IInformationFlow extends Liaison {
 		conveyed.write();
 		noeud.getChildByName("m_direction").setStringValue(direction);
 	}
+	
+	@Override
+	protected String getColorType(){
+		return "Flow";
+	}
 
 	public Texte getKeyword() {
 		return keyword;

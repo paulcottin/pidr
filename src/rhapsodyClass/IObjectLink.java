@@ -41,6 +41,11 @@ public class IObjectLink extends Liaison {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	protected String getColorType(){
+		return "connector";
+	}
 
 	public Texte getSourceMultiplicity() {
 		return sourceMultiplicity;

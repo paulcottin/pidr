@@ -24,5 +24,9 @@ public class IDependency extends Liaison{
 		
 	}
 
+	@Override
+	protected String getColorType(){
+		return lineName.getText();
+	}
 	
 }

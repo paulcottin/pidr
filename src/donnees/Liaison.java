@@ -4,8 +4,8 @@ import parser.Noeud;
 
 public abstract class Liaison extends DiagrammeObjets{
 
-	private Texte lineName;
-	private String sourceType, targetType;
+	protected Texte lineName;
+	protected String sourceType, targetType;
 	
 	public Liaison(Noeud n) {
 		super(n);

@@ -24,7 +24,7 @@ public class Projet {
 		id = noeud.getChildByName("_id").getStringValue();
 		diagrammes = new ArrayList<Diagramme>();
 		nomProjet = noeud.getChildByName("_name").getStringValue().split("\"")[1];
-		lastModifiedDate = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
+//		lastModifiedDate = noeud.getChildByName("_modifiedTimeWeak").getStringValue();
 		typeProjet = noeud.getChildByName("Stereotypes").getChildByName("value").getChildByName("_name").getStringValue().split("\"")[1];
 		diagrammes = new ArrayList<Diagramme>();
 		int nbDiagrammes = noeud.getChildByName("Diagrams").getChildByName("size").getIntValue();

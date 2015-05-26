@@ -67,7 +67,7 @@ public class DifferencesPanel extends JScrollPane implements Observer{
 		else if (!c.isComparaisonDone()) 
 			diffs.setText("");
 		else 
-			diffs.setText("<html>Differences : <br/>"+c.getDiffs().replaceAll("\n", "<br/>")+"</html>");
+			diffs.setText("<html>* "+c.getNbDiff()+" Differences : <br/>"+c.getDiffs().replaceAll("\n", "<br/>")+"</html>");
 		
 		if (c.getVis().isImagesConstructs()) {
 			constructImage();

@@ -14,7 +14,7 @@ public class IClass extends DiagrammeObjets {
 	public IClass(Noeud n) {
 		super(n);
 	}
-
+	
 	@Override
 	public void initClass(){
 		attributs = new ArrayList<Handle>();
@@ -87,34 +87,6 @@ public class IClass extends DiagrammeObjets {
 				}
 			}
 		}
-		//La couleur est traitée dans la fonction setEtat(int e) de la classe abstraite
-//		//Si la couleur a été modifiée
-//		if (r != -1) {
-//			Noeud typeProperties;
-//			if (noeud.getChildByName("_properties") != null) 
-//				typeProperties =  noeud.getChildByName("_properties").getChildByName("Subjects").getChildByName("value");
-//			else{
-//				typeProperties = constructProperties();
-//				noeud.getChilds().add(1, typeProperties);
-//			}
-//
-//			typeProperties = noeud.getChildByName("_properties").getChilds().get(1);
-//			int totalSize = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("size").getIntValue();
-//			//Ecriture de la couleur
-//			String colors = constructRGB(r, g, b);
-//			for (int i = 0; i < totalSize; i++) {
-//				if (typeProperties.getChilds().get(i).getChildByName("_Name").getStringValue().equals("\"Format\"")) {
-//					Noeud properties = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChilds().get(0).getChildByName("Properties").getChildByName("value");
-//					int size = typeProperties.getChilds().get(0).getChildByName("Metaclasses").getChildByName("value").getChildByName("Properties").getChildByName("size").getIntValue();
-//					for (int j = 0; j < size; j++) {
-//						String type = properties.getChilds().get(j).getChildByName("_Type").getStringValue();
-//						if (type.equals("Color")) {
-//							properties.getChilds().get(j).getChildByName("_Value").setStringValue(colors);
-//						}
-//					}
-//				}
-//			}
-//		}
 	}
 
 	@Override
@@ -185,6 +157,11 @@ public class IClass extends DiagrammeObjets {
 		}
 		else
 			return false;
+	}
+	
+	@Override
+	protected String getColorType(){
+		return "Block";
 	}
 
 	public ArrayList<Handle> getAttributs() {

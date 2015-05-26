@@ -24,12 +24,12 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 	public static int SUPPR_R = 255;
 	public static int SUPPR_G = 0;
 	public static int SUPPR_B = 0;
-	public static int ADD_R = 51;
+	public static int ADD_R = 0;
 	public static int ADD_G = 255;
 	public static int ADD_B = 0;
-	public static int MODIF_R = 255;
-	public static int MODIF_G = 153;
-	public static int MODIF_B = 0;
+	public static int MODIF_R = 0;
+	public static int MODIF_G = 0;
+	public static int MODIF_B = 255;
 
 	private Projet premier, deuxieme;
 	private String diffs;
@@ -38,6 +38,7 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 	private String path1, path2;
 	private String initLigne;
 	private Visualiser vis;
+	private int nbDiff;
 
 	public Comparateur(){
 		init();
@@ -61,6 +62,7 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		this.initLigne = "";
 		this.vis = new Visualiser(this);
 		this.vis.initApplication();
+		this.nbDiff = 0;
 	}
 
 	public void run(){
@@ -168,6 +170,7 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		for (Diagramme d : this.premier.getDiagrammes()) {
 			for (String s : d.getDiffString()) {
 				diffs += s+"\n";
+				nbDiff++;
 			}
 		}
 	}
@@ -280,5 +283,13 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 
 	public void setVis(Visualiser vis) {
 		this.vis = vis;
+	}
+
+	public int getNbDiff() {
+		return nbDiff;
+	}
+
+	public void setNbDiff(int nbDiff) {
+		this.nbDiff = nbDiff;
 	}
 }

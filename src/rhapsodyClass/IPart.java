@@ -28,5 +28,10 @@ public class IPart extends DiagrammeObjets {
 		// TODO Auto-generated method stub
 
 	}
+	
+	@Override
+	protected String getColorType(){
+		return "Object";
+	}
 
 }

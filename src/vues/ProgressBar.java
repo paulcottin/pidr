@@ -25,7 +25,7 @@ public class ProgressBar extends JFrame implements Observer{
 	private boolean firstTime;
 	
 	public ProgressBar(LongTask task) {
-		super("Processing...");
+		super("Calcul en cours...");
 		this.task = task;
 		((Observable) this.task).addObserver(this);
 		this.setSize(300, 50);
