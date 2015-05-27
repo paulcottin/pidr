@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -36,7 +37,11 @@ public class Fenetre extends JFrame {
 		
 		this.container = new JPanel();
 		this.container.setLayout(new BorderLayout());
-		this.container.add(new FilesInformations(c), BorderLayout.NORTH);
+		JPanel north = new JPanel();
+		north.setLayout(new BoxLayout(north, BoxLayout.PAGE_AXIS));
+		north.add(new FilesInformations(c));
+		north.add(new Legende(c));
+		this.container.add(north, BorderLayout.NORTH);
 		this.container.add(new DifferencesPanel(c), BorderLayout.CENTER);
 		
 		this.setContentPane(container);

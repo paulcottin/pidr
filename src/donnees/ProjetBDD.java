@@ -33,6 +33,7 @@ public class ProjetBDD {
 				}
 			}
 			nbDiffs = 0;
+			diffs = "";
 			initCorrespondance(diagrammes.size());
 		}
 	}
@@ -76,7 +77,7 @@ public class ProjetBDD {
 	private void writeDiff(){
 		for (Diagramme d : this.diagrammes) {
 			for (String s : d.getDiffString()) {
-				diffs += s+"\n";
+				diffs += s != null ? s+"\n" : "";
 				nbDiffs++;
 			}
 		}

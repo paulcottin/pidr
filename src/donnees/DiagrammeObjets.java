@@ -46,12 +46,6 @@ public abstract class DiagrammeObjets {
 		classe = getOutQuotes(noeud.getChildByName("m_pModelObject").getChildByName("_m2Class").getStringValue());
 		etat = IDEM;
 		modif = new ArrayList<String>();
-//		suppr = new ArrayList<String>();
-//		add = new ArrayList<String>();
-//		System.out.println("Objet "+name.getText()+" ("+classe+")");
-//		r = -1; 
-//		g = -1;
-//		b = -1;
 	}
 	
 	/**

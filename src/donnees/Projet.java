@@ -37,6 +37,7 @@ public class Projet {
 			diagrammes.add(new Diagramme(noeud.getChildByName("Diagrams").getChilds().get(1).getChilds().get(i)));
 		}
 		nbDiffs = 0;
+		diffs = "";
 		initCorrespondance(diagrammes.size());
 	}
 	
@@ -93,7 +94,7 @@ public class Projet {
 	private void writeDiff(){
 		for (Diagramme d : this.diagrammes) {
 			for (String s : d.getDiffString()) {
-				diffs += s+"\n";
+				diffs += s != null ? s+"\n" : "";
 				nbDiffs++;
 			}
 		}
