@@ -210,8 +210,24 @@ public abstract class DiagrammeObjets {
 //		System.out.println("1 ;"+n.getChild(0).toString());
 //		System.out.println("2 ;"+n.getChild(0).getChild(0).toString());
 //		if (n.getChild(0).getChild(0).getName().equals(n.getChild(0).getName())) {
-//			n.setChilds(n.getChild(0).getChilds());
+////			Noeud no = new Noeud();
+////			no.setName("Subjects");
+////			no.setClasse("IRPYRawContainer");
+////			no.setStringValue(null);
+////			no.setIntValue(-8000);
+////			n.getChild(0).getChild(0).getChild(0).setClasse("IRPYRawContainer");
+////			no.setChilds(n.getChild(0).getChild(0).getChilds());
+////			Noeud n1 = new Noeud(-8000, null, new ArrayList<Noeud>());
+////			n1.setClasse("IPropertyContainer");
+////			n1.getChilds().add(no);
+////			ArrayList<Noeud> l = new ArrayList<Noeud>();
+////			l.add(n1);
+////			n.getChilds().addAll(l);
+//			
 //		}
+//		System.out.println("0 ;"+n.toString()+" - "+n.getClasse());
+//		System.out.println("1 ;"+n.getChild(0).toString());
+//		System.out.println("2 ;"+n.getChild(0).getChild(0).toString());
 		return n;
 	}
 	

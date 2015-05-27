@@ -45,34 +45,7 @@ public class Diagramme {
 		for (Noeud n : listDiag.getChilds()) {
 			int type = n.getChildByName("m_type").getIntValue();
 			if (type != 78) {
-				switch (getClass(n)) {
-				case "IClass":
-					objets.add(new IClass(n));
-					break;
-				case "IAssociationEnd":
-					objets.add(new IAssociationEnd(n));
-					break;
-				case "IPort":
-					objets.add(new IPort(n));
-					break;
-				case "IDependency":
-					objets.add(new IDependency(n));
-					break;
-				case "IInformationFlow":
-					objets.add(new IInformationFlow(n));
-					break;
-				case "ISysMLPort":
-					objets.add(new ISysMLPort(n));
-					break;
-				case "IPart":
-					objets.add(new IPart(n));
-					break;
-				case "IObjectLink":
-					objets.add(new IObjectLink(n));
-					break;
-				default:
-					break;
-				}
+				creationObjet(n);
 			}
 		}
 		etat = DiagrammeObjets.IDEM;
@@ -103,7 +76,7 @@ public class Diagramme {
 	private void doCorrespondance(Diagramme d){
 		diffString.clear();
 		//On parcourt this, les objets qui sont dans les deux se mettent en correspondance
-		//Ceux qui ne sont pas dans d se mettent en etat SUPPR
+		//Ceux qui ne sont pas dans d se mettent en etat ADD
 		boolean find = false;
 		for (int i = 0; i < objets.size(); i++) {
 			find = false;
@@ -115,11 +88,10 @@ public class Diagramme {
 			}
 			if (!find) {
 				objets.get(i).setEtat(DiagrammeObjets.ADD);
-				d.getObjets().add(objets.get(i));
 				diffString.add("Ajout : "+objets.get(i).getNameText()+" ("+objets.get(i).getClasse()+")");
 			}
 		}
-		//On parcourt d, ceux qui ne sont pas dans this se mettent en etat ADD
+		//On parcourt d, ceux qui ne sont pas dans this se mettent en etat SUPPR
 		find = false;
 		for (int i = 0; i < d.getObjets().size(); i++) {
 			find = false;
@@ -129,7 +101,9 @@ public class Diagramme {
 				}
 			}
 			if (!find) {
-				d.getObjets().get(i).setEtat(DiagrammeObjets.SUPPR);
+				System.out.println("SUPPR");
+				this.add(d.getObjets().get(i));
+				this.getObjets().get(objets.size()-1).setEtat(DiagrammeObjets.SUPPR);
 				diffString.add("Suppression : "+d.getObjets().get(i).getNameText()+" ("+d.getObjets().get(i).getClasse()+")");
 			}
 		}
@@ -142,7 +116,7 @@ public class Diagramme {
 	 */
 	private void compare(Diagramme d){
 		//on compare les diagrammes en commun
-		for (int i = 0; i < objets.size(); i++) {
+		for (int i = 0; i < correspondance.length; i++) {
 			if (correspondance[i] != -1) {
 				if (!objets.get(i).egal(d.getObjets().get(correspondance[i]))) {
 					diffString.addAll(objets.get(i).getModif());
@@ -163,6 +137,54 @@ public class Diagramme {
 		for (DiagrammeObjets d : objets) {
 			d.writeGeneral();
 			d.write();
+		}
+	}
+	
+	/**
+	 * Ajoute un objet au diagramme
+	 * @param d : objet à ajouter
+	 */
+	public void add(DiagrammeObjets d){
+		//On incrémente le nombre d'éléments
+		Noeud nbElement = noeud.getChildByName("_graphicChart").getChildByName("elementList");
+		nbElement.setIntValue(nbElement.getIntValue()+1);
+		//Ajout du noeud
+		Noeud n = noeud.getChildByName("_graphicChart").getChilds().get(noeud.getChildByName("_graphicChart").getChilds().indexOf(noeud.getChildByName("_graphicChart").getChildByName("elementList"))+1);
+		System.out.println(n.toString());
+		n.getChilds().add(d.getNoeud());
+		//Ajout de l'objet à la liste
+		creationObjet(n.getChild(n.getChildCount()-1));
+		System.out.println(n.toString());
+	}
+	
+	private void creationObjet(Noeud n){
+		switch (getClass(n)) {
+		case "IClass":
+			objets.add(new IClass(n));
+			break;
+		case "IAssociationEnd":
+			objets.add(new IAssociationEnd(n));
+			break;
+		case "IPort":
+			objets.add(new IPort(n));
+			break;
+		case "IDependency":
+			objets.add(new IDependency(n));
+			break;
+		case "IInformationFlow":
+			objets.add(new IInformationFlow(n));
+			break;
+		case "ISysMLPort":
+			objets.add(new ISysMLPort(n));
+			break;
+		case "IPart":
+			objets.add(new IPart(n));
+			break;
+		case "IObjectLink":
+			objets.add(new IObjectLink(n));
+			break;
+		default:
+			break;
 		}
 	}
 

@@ -62,7 +62,7 @@ public class Writer {
 		if (n.getChilds() != null) {
 			if (n.getChildCount() > 0) {
 				for (Noeud noeud : n.getChilds()) {
-					writeNoeudHelper(noeud);
+						writeNoeudHelper(noeud);
 				}
 			}
 		}
