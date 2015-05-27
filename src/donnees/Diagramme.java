@@ -114,9 +114,9 @@ public class Diagramme {
 				}
 			}
 			if (!find) {
-				objets.get(i).setEtat(DiagrammeObjets.SUPPR);
+				objets.get(i).setEtat(DiagrammeObjets.ADD);
 				d.getObjets().add(objets.get(i));
-				diffString.add("Suppression : "+objets.get(i).getNameText()+" ("+objets.get(i).getClasse()+")");
+				diffString.add("Ajout : "+objets.get(i).getNameText()+" ("+objets.get(i).getClasse()+")");
 			}
 		}
 		//On parcourt d, ceux qui ne sont pas dans this se mettent en etat ADD
@@ -129,8 +129,8 @@ public class Diagramme {
 				}
 			}
 			if (!find) {
-				d.getObjets().get(i).setEtat(DiagrammeObjets.ADD);
-				diffString.add("Ajout : "+d.getObjets().get(i).getNameText()+" ("+d.getObjets().get(i).getClasse()+")");
+				d.getObjets().get(i).setEtat(DiagrammeObjets.SUPPR);
+				diffString.add("Suppression : "+d.getObjets().get(i).getNameText()+" ("+d.getObjets().get(i).getClasse()+")");
 			}
 		}
 	}

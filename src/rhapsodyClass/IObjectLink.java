@@ -24,11 +24,11 @@ public class IObjectLink extends Liaison {
 		if (l instanceof IObjectLink) {
 			IObjectLink o = (IObjectLink) l;
 			if (!sourceMultiplicity.equals(o.getSourceMultiplicity())) {
-				modif.add("Connector : Multiplicité de la source");
+				modif.add("Modification : Connector : Multiplicité de la source");
 				b = false;
 			}
 			if (!targetMultiplicity.equals(o.getTargetMultiplicity())) {
-				modif.add("Connector : Multiplicité de la cible");
+				modif.add("Modification : Connector : Multiplicité de la cible");
 				b = false;
 			}
 			return b;

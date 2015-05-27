@@ -26,15 +26,15 @@ public class IInformationFlow extends Liaison {
 		if (l instanceof IInformationFlow) {
 			IInformationFlow o = (IInformationFlow) l;
 			if (!keyword.equals(o.getKeyword())){
-				modif.add("Flow - keyword : "+keyword.getText());
+				modif.add("Modification : Flow - keyword : "+keyword.getText());
 				b = false;
 			}
 			if (!conveyed.equals(o.getConveyed())){
-				modif.add("Flow - conveyed : "+conveyed.getText());
+				modif.add("Modification : Flow - conveyed : "+conveyed.getText());
 				b = false;
 			}
 			if (!direction.equals(o.getDirection())) {
-				modif.add("Flow - direction : "+o.getDirection());
+				modif.add("Modification : Flow - direction : "+o.getDirection());
 				b = false;
 			}
 			return b;

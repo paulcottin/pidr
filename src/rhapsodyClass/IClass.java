@@ -96,7 +96,7 @@ public class IClass extends DiagrammeObjets {
 		if (objet instanceof IClass) {
 			IClass o = (IClass) objet;
 			if (!name.getText().equals(o.getNameText())) {
-				modif.add("nom : "+o.getNameText());
+				modif.add("Modification : nom : "+o.getNameText());
 				name.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
 				b = false;
 			}
@@ -111,10 +111,10 @@ public class IClass extends DiagrammeObjets {
 							commun.add(attributs.get(i));
 					//Les attributs qu'il y a dans la version de depart et pas celle d'arrivee
 					for (int i = 0; i < attributs.size(); i++) 
-						if (!commun.contains(attributs.get(i))) modif.add("Block \""+name+"\" - attribut \""+attributs.get(i).getNom()+"\" supprimé");
+						if (!commun.contains(attributs.get(i))) modif.add("Modification : Block \""+name+"\" - attribut \""+attributs.get(i).getNom()+"\" supprimé");
 					//Les attributs qui sont dans la version d'arrivée et pas dans celle de départ
 					for (int i = 0; i < o.getAttributs().size(); i++) {
-						if (!commun.contains(o.getAttributs().get(i))) modif.add("Block \""+name+"\" - attribut \""+o.getAttributs().get(i).getNom()+"\" ajouté");
+						if (!commun.contains(o.getAttributs().get(i))) modif.add("Modification : Block \""+name+"\" - attribut \""+o.getAttributs().get(i).getNom()+"\" ajouté");
 					}
 				}
 				//Si il y en a plus dans la version modifiée
@@ -132,7 +132,7 @@ public class IClass extends DiagrammeObjets {
 					}
 				}
 				if (!test) {
-					modif.add("attributs : "+t.toString());
+					modif.add("Modification : attributs : "+t.toString());
 //					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
 					setEtat(MODIF);
 					b = false; 
@@ -147,7 +147,7 @@ public class IClass extends DiagrammeObjets {
 				}
 				if (!test) {
 					System.out.println("ope modif");
-					modif.add("operations : "+t.toString());
+					modif.add("Modification : operations : "+t.toString());
 //					this.setRGB(Comparateur.MODIF_R, Comparateur.MODIF_G, Comparateur.MODIF_B);
 					setEtat(MODIF);
 					b = false; 

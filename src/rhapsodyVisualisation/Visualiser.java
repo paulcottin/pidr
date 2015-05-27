@@ -26,7 +26,7 @@ import com.telelogic.rhapsody.core.RhapsodyAppServer;
 
 import donnees.Diagramme;
 
-public class Visualiser extends Observable implements Runnable, LongTask, WindowListener{
+public class Visualiser extends Observable implements Runnable, LongTask{
 
 	private Comparateur c;
 	private String projectPath, projectName, realProjectPath;
@@ -72,7 +72,8 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		System.out.println(project.getDisplayName());
 		ArrayList<IRPDiagram> diagrammes = new ArrayList<IRPDiagram>();
 		String tmpPath = new File("tmp").getAbsolutePath().replace("\\", "\\\\")+"\\";
-		for (Diagramme diag : c.getDeuxieme().getProjet().getDiagrammes()) {
+		System.out.println("size diags : "+c.getDeuxieme().getDiagrammes().size());
+		for (Diagramme diag : c.getDeuxieme().getDiagrammes()) {
 			diagrammes.add((IRPDiagram) project.findElementByGUID(diag.getId()));
 		}
 		for (int j = 0; j < diagrammes.size(); j++) {
@@ -110,22 +111,33 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 	private void writeProjectWithDiff(){
 		//1. sauvegarde de l'ancien path
 		realProjectPath = projectPath;
-		//1. on deplace le fichier dans tmp/
+		//1. on deplace les fichiers dans tmp/
 		String[] pathTab = projectPath.split("\\\\");
 		String nomFichier = pathTab[pathTab.length-1];
 		Path pathProject = FileSystems.getDefault().getPath(realProjectPath);
 		Path pathTmp = FileSystems.getDefault().getPath("tmp", nomFichier);
+		Path pathDefault = FileSystems.getDefault().getPath(realProjectPath.substring(0, realProjectPath.indexOf("."))+"_rpy\\Default.sbs");
+		Path pathTmpDefault = FileSystems.getDefault().getPath("tmp", "Default.sbs");
 		try {
 			Files.move(pathProject, pathTmp, StandardCopyOption.REPLACE_EXISTING);
+			Files.move(pathDefault, pathTmpDefault, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//Ecriture des fichiers à partir de l'arbre
 		Writer writer = new Writer(c.getDeuxieme().getProjet().getNoeud(), realProjectPath);
 		writer.setInitLigne(c.getInitLigne());
 		writer.write();
+		Writer writerSBS = new Writer(c.getDeuxieme().getProjetBDD().getNoeud(), realProjectPath.substring(0, realProjectPath.indexOf("."))+"_rpy\\Default.sbs");
+		writerSBS.setInitLigne(c.getInitLigne());
+		writerSBS.write();
+		//
 		Writer writer2 = new Writer(c.getDeuxieme().getProjet().getNoeud(), "retour.rpy");
 		writer2.setInitLigne(c.getInitLigne());
 		writer2.write();
+		Writer writer3 = new Writer(c.getDeuxieme().getProjetBDD().getNoeud(), "retourBDD.rpy");
+		writer3.setInitLigne(c.getInitLigne());
+		writer3.write();
 		projectPath = realProjectPath;
 	}
 	
@@ -135,8 +147,11 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 		String nomFichier = pathTab[pathTab.length-1];
 		Path pathProject = FileSystems.getDefault().getPath(realProjectPath);
 		Path pathTmp = FileSystems.getDefault().getPath("tmp", nomFichier);
+		Path pathDefault = FileSystems.getDefault().getPath(realProjectPath.substring(0, realProjectPath.indexOf("."))+"_rpy\\Default.sbs");
+		Path pathTmpDefault = FileSystems.getDefault().getPath("tmp", "Default.sbs");
 		try {
 			Files.move(pathTmp, pathProject, StandardCopyOption.REPLACE_EXISTING);
+			Files.move(pathTmpDefault, pathDefault, StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -185,47 +200,6 @@ public class Visualiser extends Observable implements Runnable, LongTask, Window
 
 	public void setImages(ArrayList<BufferedImage> images) {
 		this.images = images;
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		RhapsodyAppServer.CloseSession();
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String getRealProjectPath() {

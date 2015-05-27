@@ -191,7 +191,8 @@ public abstract class DiagrammeObjets {
 			//Si _properties est null
 			else {
 				//Créer _properties
-				noeud.getChilds().add(1, constructProperties());
+				Noeud prop = constructProperties();
+				noeud.getChilds().add(1, prop);
 			}
 		}
 	}
@@ -205,7 +206,12 @@ public abstract class DiagrammeObjets {
 		Parser2 p = new Parser2("tmp\\properties.rpy");
 		Noeud n = p.parse();
 		n.setName("_properties");
-		n.setChilds(n.getChild(0).getChilds());
+//		System.out.println("0 ;"+n.toString()+" - "+n.getClasse());
+//		System.out.println("1 ;"+n.getChild(0).toString());
+//		System.out.println("2 ;"+n.getChild(0).getChild(0).toString());
+//		if (n.getChild(0).getChild(0).getName().equals(n.getChild(0).getName())) {
+//			n.setChilds(n.getChild(0).getChilds());
+//		}
 		return n;
 	}
 	

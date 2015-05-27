@@ -80,7 +80,7 @@ public class IAssociationEnd extends DiagrammeObjets{
 		if (o instanceof IAssociationEnd) {
 			IAssociationEnd ob = (IAssociationEnd) o;
 			if (debut.equals(ob.getDebut()) && fin.equals(ob.getFin()) && debMultiplicity.equals(ob.getDebMultiplicity()) && finMultiplicity.equals(ob.getFinMultiplicity()) && debFleche.equals(ob.getDebFleche()) && finFleche.equals(ob.getFinFleche()) && typeFleche==ob.getTypeFleche()){
-				modif.add("Association : "+debut+" - "+fin);
+				modif.add("Modification : association,  "+debut+" - "+fin);
 				return true;
 			}
 			else

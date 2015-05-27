@@ -1,5 +1,7 @@
 package donnees;
 
+import java.util.ArrayList;
+
 import parser.Noeud;
 import parser.Parser2;
 
@@ -12,6 +14,7 @@ public class ProjetGlobal {
 	private String initLigne;
 	private String diffs;
 	private int nbDiffs;
+	private ArrayList<Diagramme> diagrammes;
 	
 	public ProjetGlobal(String pathRPY) {
 		this.path = pathRPY;
@@ -22,6 +25,7 @@ public class ProjetGlobal {
 		//initialisations globales
 		diffs = "";
 		nbDiffs = 0;
+		diagrammes = new ArrayList<Diagramme>();
 		//Initialisation Projet
 		parser = new Parser2(path);
 		Noeud n = parser.parse();
@@ -31,14 +35,22 @@ public class ProjetGlobal {
 		String sbsPath = path.substring(0, path.indexOf("."))+"_rpy\\"+"Default.sbs";
 		parser = new Parser2(sbsPath);
 		Noeud n1 = parser.parse();
+		n1.setName("ISubsystem");
 		projetBDD = new ProjetBDD(n1);
 	}
 	
 	public void compare(ProjetGlobal p){
+		//Comparaison de Projet
 		projet.compare(p.getProjet());
-		
 		diffs+= projet.getDiffs();
 		nbDiffs += projet.getNbDiffs();
+		diagrammes.addAll(projet.getDiagrammes());
+		
+		//Comparaison de ProjetBDD
+		projetBDD.compare(p.getProjetBDD());
+		diffs+= projetBDD.getDiffs();
+		nbDiffs += projetBDD.getNbDiffs();
+		diagrammes.addAll(projetBDD.getDiagrammes());
 	}
 
 	public Projet getProjet() {
@@ -95,6 +107,14 @@ public class ProjetGlobal {
 
 	public void setNbDiffs(int nbDiffs) {
 		this.nbDiffs = nbDiffs;
+	}
+
+	public ArrayList<Diagramme> getDiagrammes() {
+		return diagrammes;
+	}
+
+	public void setDiagrammes(ArrayList<Diagramme> diagrammes) {
+		this.diagrammes = diagrammes;
 	}
 
 }

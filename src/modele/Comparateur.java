@@ -68,9 +68,9 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 	public void run(){
 		this.running = true;
 		diffs = "";
-		premier.compare(deuxieme);
-		diffs = premier.getDiffs();
-		nbDiff = premier.getNbDiffs();
+		deuxieme.compare(premier);
+		diffs = deuxieme.getDiffs();
+		nbDiff = deuxieme.getNbDiffs();
 		this.running = false;
 		this.comparaisonDone = true;
 		update();
@@ -124,6 +124,7 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		this.comparaisonDone = false;
 		this.premier = new ProjetGlobal(this.path1);
 		this.initLigne = premier.getInitLigne();
+		System.out.println("init ligne : "+initLigne);
 		update();
 	}
 
@@ -144,7 +145,6 @@ public class Comparateur extends Observable implements Runnable, LongTask{
 		this.path2 = path2.replace("\\", "\\\\");
 		this.comparaisonDone = false;
 		this.deuxieme = new ProjetGlobal(this.path2);
-		this.initLigne = deuxieme.getInitLigne();
 		update();
 	}
 
